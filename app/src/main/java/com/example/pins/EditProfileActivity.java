@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -57,6 +58,14 @@ public class EditProfileActivity extends AppCompatActivity {
         String fname = fullName.getText().toString();
         String gen = gender.getText().toString();
 
+
+
+        String key = usersRef.push().getKey();
+
+        User user = new User(uname, fname, gen);
+
+        Map<String, Object> userVals = user.toMap();
+
         if(TextUtils.isEmpty(uname)){
             Toast.makeText(EditProfileActivity.this,"Provide username", Toast.LENGTH_LONG).show();
         }
@@ -67,11 +76,10 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(EditProfileActivity.this,"Provide gender", Toast.LENGTH_LONG).show();
         }
         else {
-            HashMap userInfo = new HashMap();
-            userInfo.put("username", uname);
-            userInfo.put("fullName", fname);
-            userInfo.put("gender", gen);
-            usersRef.updateChildren(userInfo).addOnCompleteListener(new OnCompleteListener() {
+            HashMap childUpdates = new HashMap();
+            childUpdates.put("GfpweNEFL79RO77M0s7Q", userVals);
+
+            usersRef.updateChildren(childUpdates).addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful()){
