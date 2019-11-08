@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class HomeActivity extends AppCompatActivity {
 
     private Button logoutBtn;
+    private Button openProfile;
     private FirebaseAuth mAuth;
 
     @Override
@@ -23,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         logoutBtn = findViewById(R.id.homePageLogoutBtn);
+        openProfile = findViewById(R.id.homeProfile);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -33,6 +35,14 @@ public class HomeActivity extends AppCompatActivity {
                 LoginManager.getInstance().logOut(); //this will logout of Facebook
                 updateUI();
 
+            }
+        });
+
+        openProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent profilePage = new Intent(HomeActivity.this, ProfileActivity.class);
+                startActivity(profilePage);
             }
         });
     }
