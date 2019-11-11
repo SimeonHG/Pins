@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class User {
-    //public String uid;
+    public String uid;
     public String username;
     public String fullName;
     public String gender;
@@ -18,7 +18,8 @@ public class User {
 
     }
 
-    public User(String username, String fullName, String gender) {
+    public User(String uid, String username, String fullName, String gender) {
+        this.uid = uid;
         this.fullName = fullName;
         this.username = username;
         this.gender = gender;
