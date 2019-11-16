@@ -8,8 +8,8 @@ import java.util.Map;
 
 public class User {
     public String uid;
-    public String username;
-    public String fullName;
+    public String display_name;
+    public String full_name;
     public String gender;
     public Locale last_location;
 
@@ -20,8 +20,8 @@ public class User {
 
     public User(String uid, String username, String fullName, String gender) {
         this.uid = uid;
-        this.fullName = fullName;
-        this.username = username;
+        this.full_name = fullName;
+        this.display_name = username;
         this.gender = gender;
 
     }
@@ -31,8 +31,8 @@ public class User {
         HashMap<String, Object> result = new HashMap<>();
 
 
-        result.put("username", username);
-        result.put("fullName", fullName);
+        result.put("display_name", display_name);
+        result.put("full_name", full_name);
         result.put("gender", gender);
 
         return result;

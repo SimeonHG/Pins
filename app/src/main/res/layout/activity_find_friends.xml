@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".FindFriendsActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_layout"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/serchText"
+            android:text="Search for people and friends"
+            android:layout_margin="30dp"
+            >
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/search_input"
+            android:layout_width="150dp"
+            android:layout_height="70dp"
+            android:layout_below="@id/serchText"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="89dp"
+            android:layout_marginLeft="89dp"
+            android:layout_marginTop="41dp"
+            android:hint="Search.."
+            android:inputType="textMultiLine" />
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_below="@id/serchText"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="41dp"
+            android:layout_toEndOf="@+id/search_input"
+            android:layout_toRightOf="@+id/search_input"
+            android:text="Q"
+            android:textSize="30dp"/>
+
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_layout"
+        android:layout_margin="10dp"
+
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
+</RelativeLayout>
