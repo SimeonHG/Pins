@@ -53,4 +53,12 @@
         android:layout_marginRight="-9dp"
         android:layout_marginBottom="6dp"
         android:text="Logout" />
+
+    <Button
+        android:id="@+id/editProfileBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/homePageLogoutBtn"
+        android:layout_marginBottom="27dp"
+        android:text="Edit Profile" />
 </RelativeLayout>

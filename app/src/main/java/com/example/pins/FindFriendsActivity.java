@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,11 +64,22 @@ public class FindFriendsActivity extends AppCompatActivity {
                     User.class, R.layout.all_users_display_layout, FindFriendsViewHolder.class, searchPeopleQuery
                 ) {
             @Override
-            protected void populateViewHolder(FindFriendsViewHolder viewHolder, User user, int i) {
+            protected void populateViewHolder(FindFriendsViewHolder viewHolder, User user, final int position) {
                 viewHolder.setFullname(user.full_name);
                 viewHolder.setDisplayname(user.display_name);
                 Toast.makeText(FindFriendsActivity.this, "Username: "+ user.display_name,  Toast.LENGTH_SHORT).show();
                 viewHolder.setGender(user.gender);
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String visit_user_id = getRef(position).getKey();
+
+                        Intent profileIntent = new Intent(FindFriendsActivity.this, PersonProfileActivity.class);
+                        profileIntent.putExtra("visit_user_id", visit_user_id);
+                        startActivity(profileIntent);
+                    }
+                });
             }
 
 
