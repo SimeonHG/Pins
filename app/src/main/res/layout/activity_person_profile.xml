@@ -45,19 +45,11 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/personAcceptBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Accept Friend Request"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/personDeclineFriendRequest"
+        android:id="@+id/personDeclineBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Decline Friend Request"
-        app:layout_constraintBottom_toTopOf="@+id/personAcceptBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
