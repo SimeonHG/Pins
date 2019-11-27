@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class HomeActivity extends AppCompatActivity {
 
     private Button logoutBtn;
-    private Button openProfile, findFriends, editProfile;
+    private Button openProfile, findFriends, editProfile, checkMap;
     private FirebaseAuth mAuth;
 
     @Override
@@ -27,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
         openProfile = findViewById(R.id.homeProfile);
         findFriends = findViewById(R.id.findFriendsBtn);
         editProfile = findViewById(R.id.editProfileBtn);
+        checkMap = findViewById(R.id.checkMapBtn);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -52,8 +53,8 @@ public class HomeActivity extends AppCompatActivity {
         findFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent profilePage = new Intent(HomeActivity.this, FindFriendsActivity.class);
-                startActivity(profilePage);
+                Intent findFriendsPage = new Intent(HomeActivity.this, FindFriendsActivity.class);
+                startActivity(findFriendsPage);
             }
         });
 
@@ -62,6 +63,14 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent editProfile = new Intent(HomeActivity.this, EditProfileActivity.class);
                 startActivity(editProfile);
+            }
+        });
+
+        checkMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent maps = new Intent(HomeActivity.this, MapsActivity.class);
+                startActivity(maps);
             }
         });
     }
