@@ -1,5 +1,6 @@
 package com.example.pins;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
@@ -12,15 +13,26 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -28,6 +40,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
 
     private LocationManager locationManager;
+    private DatabaseReference locationsRef;
+    private FirebaseAuth mAuth;
+    private String currentUserID;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -35,6 +50,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        locationsRef = FirebaseDatabase.getInstance().getReference("Locations");
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -62,17 +83,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     LatLng currentLatLng = new LatLng(latitude, longitude);
 
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address>addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String locality = addressList.get(0).getLocality() + " ";
-                        locality+= addressList.get(0).getCountryName();
+                    locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
+                    locationsRef.child(currentUserID).child("last_location").child("longitude").setValue(longitude);
 
-                        mMap.addMarker(new MarkerOptions().position(currentLatLng).title(locality));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                   // final List<LatLng> allFriendsLocations = new ArrayList<>();
+                    locationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            mMap.clear();
+                            for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                double db_latitude = (double) snapshot.child("latitude").getValue();
+                                double db_longitude = (double) snapshot.child("longitude").getValue();
+                                LatLng latLng = new LatLng(db_latitude, db_longitude);
+                                mMap.addMarker(new MarkerOptions().position(latLng));
+                                //allFriendsLocations.add(latLng);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
                 }
 
                 @Override
@@ -101,17 +136,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     LatLng currentLatLng = new LatLng(latitude, longitude);
 
-                    Geocoder geocoder = new Geocoder(getApplicationContext());
-                    try {
-                        List<Address>addressList = geocoder.getFromLocation(latitude, longitude, 1);
-                        String locality = addressList.get(0).getLocality() + " ";
-                        locality+= addressList.get(0).getCountryName();
+                    locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
+                    locationsRef.child(currentUserID).child("last_location").child("longitude").setValue(longitude);
 
-                        mMap.addMarker(new MarkerOptions().position(currentLatLng).title(locality));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    //final List<LatLng> allFriendsLocations = new ArrayList<>();
+                    locationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            mMap.clear();
+                            for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                double db_latitude = (double) snapshot.child("last_location").child("latitude").getValue();
+                                double db_longitude = (double) snapshot.child("last_location").child("longitude").getValue();
+                                LatLng latLng = new LatLng(db_latitude, db_longitude);
+                                //allFriendsLocations.add(latLng);
+                                mMap.addMarker(new MarkerOptions().position(latLng));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
                 }
 
                 @Override
