@@ -12,6 +12,7 @@ public class Event {
     public Date time_start;
     public String title;
     public String desc;
+    public String start_time_as_string;
 
     public Event() {
 
@@ -66,6 +67,7 @@ public class Event {
         result.put("title", title);
         result.put("desc", desc);
         result.put("time_started", time_start);
+        result.put("start_time_as_string", time_start.toString());
 
         return result;
     }

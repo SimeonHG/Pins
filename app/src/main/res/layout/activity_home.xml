@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,22 +13,22 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="179dp"
-        android:layout_marginRight="179dp"
-        android:layout_marginBottom="520dp"
-        android:text="Welcome" />
+        android:text="Welcome"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="159dp" />
 
     <Button
         android:id="@+id/homeProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="-3dp"
-        android:layout_marginRight="-3dp"
-        android:layout_marginBottom="628dp"
-        android:text="Profile" />
+        android:layout_marginBottom="52dp"
+        android:text="Profile"
+        app:layout_constraintBottom_toTopOf="@+id/editProfileBtn"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/findFriendsBtn"
@@ -37,10 +37,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="-3dp"
-        android:layout_marginRight="-3dp"
-        android:layout_marginBottom="439dp"
-        android:text="Find Friends" />
+        android:layout_marginBottom="52dp"
+        android:text="Find Friends"
+        app:layout_constraintBottom_toTopOf="@+id/homeProfile"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/homePageLogoutBtn"
@@ -49,18 +49,18 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="-9dp"
-        android:layout_marginRight="-9dp"
-        android:layout_marginBottom="6dp"
-        android:text="Logout" />
+        android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/editProfileBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/homePageLogoutBtn"
-        android:layout_marginBottom="27dp"
-        android:text="Edit Profile" />
+        android:text="Edit Profile"
+        app:layout_constraintBottom_toTopOf="@+id/homePageLogoutBtn"
+        tools:layout_editor_absoluteX="3dp" />
 
     <Button
         android:id="@+id/checkMapBtn"
@@ -69,10 +69,10 @@
         android:layout_above="@+id/editProfileBtn"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginEnd="-2dp"
-        android:layout_marginRight="-2dp"
-        android:layout_marginBottom="210dp"
-        android:text="Check The  Map" />
+        android:layout_marginBottom="52dp"
+        android:text="Check The  Map"
+        app:layout_constraintBottom_toTopOf="@+id/eventsBtn"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/eventsBtn"
@@ -81,8 +81,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="427dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginRight="3dp"
-        android:text="Events" />
-</RelativeLayout>
+        android:layout_marginBottom="52dp"
+        android:text="Events"
+        app:layout_constraintBottom_toTopOf="@+id/findFriendsBtn"
+        tools:layout_editor_absoluteX="16dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -83,9 +83,9 @@ public class EventsActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         String visit_event_id = getRef(position).getKey();
 
-                        Intent profileIntent = new Intent(EventsActivity.this, PersonProfileActivity.class);
-                        profileIntent.putExtra("visit_event_id", visit_event_id);
-                        startActivity(profileIntent);
+                        Intent eventIntent = new Intent(EventsActivity.this, EventProfileActivity.class);
+                        eventIntent.putExtra("visit_event_id", visit_event_id);
+                        startActivity(eventIntent);
                     }
                 });
             }

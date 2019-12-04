@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EventCreateActivity"></activity>
+        <activity android:name=".EventProfileActivity"></activity>
+        <activity android:name=".EventCreateActivity" />
         <activity android:name=".EventPickDateTimeActivity" />
         <activity android:name=".EventsActivity" />
         <!--
