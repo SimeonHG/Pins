@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="5dp"
+
+
+        >
+        <TextView
+            android:id="@+id/all_events_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="event Title"
+            android:textAlignment="textStart"
+            android:gravity="start" />
+
+        <TextView
+            android:id="@+id/all_events_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="event Desc"
+            android:textAlignment="textStart"
+            android:gravity="start" />
+        <TextView
+            android:id="@+id/all_events_startTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="event StartTime"
+            android:textAlignment="textStart"
+            android:gravity="start" />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

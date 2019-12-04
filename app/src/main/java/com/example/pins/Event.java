@@ -1,20 +1,28 @@
 package com.example.pins;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Event {
 
-    private Date dateCreated;
-    private Date dateStarted;
-    private String title;
-    private String decription;
+    public Date dateCreated;
+    public Date time_start;
+    public String title;
+    public String desc;
+
+    public Event() {
+
+    }
 
 
-    public Event(Date dateCreated, Date dateStarted, String title, String decription) {
+    public Event(Date dateCreated, Date dateStarted, String title, String description) {
         this.dateCreated = dateCreated;
-        this.dateStarted = dateStarted;
+        this.time_start = dateStarted;
         this.title = title;
-        this.decription = decription;
+        this.desc = description;
     }
 
     public Date getDateCreated() {
@@ -26,11 +34,11 @@ public class Event {
     }
 
     public Date getDateStarted() {
-        return dateStarted;
+        return time_start;
     }
 
     public void setDateStarted(Date dateStarted) {
-        this.dateStarted = dateStarted;
+        this.time_start = dateStarted;
     }
 
     public String getTitle() {
@@ -42,14 +50,24 @@ public class Event {
     }
 
     public String getDecription() {
-        return decription;
+        return desc;
     }
 
     public void setDecription(String decription) {
-        this.decription = decription;
+        this.desc = decription;
     }
 
 
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
 
+
+        result.put("title", title);
+        result.put("desc", desc);
+        result.put("time_started", time_start);
+
+        return result;
+    }
 
 }

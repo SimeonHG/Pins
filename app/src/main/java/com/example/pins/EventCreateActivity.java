@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,7 @@ public class EventCreateActivity extends AppCompatActivity {
     private TextView test;
     private EditText title, desc;
     private Button createEventBtn;
+    private FirebaseAuth mAuth;
 
     private DatabaseReference eventsRef;
     long id;
@@ -39,6 +41,8 @@ public class EventCreateActivity extends AppCompatActivity {
         desc = findViewById(R.id.createDesc);
 
         createEventBtn = findViewById(R.id.createEventBtn);
+
+        mAuth = FirebaseAuth.getInstance();
 
         test.setText(start_date.getTime().toString());
 
@@ -66,6 +70,7 @@ public class EventCreateActivity extends AppCompatActivity {
                 eventsRef.child(String.valueOf(id+1)).child("desc").setValue(desc.getText().toString());
                 eventsRef.child(String.valueOf(id+1)).child("time_created").setValue(Calendar.getInstance().getTime());
                 eventsRef.child(String.valueOf(id+1)).child("time_start").setValue(start_date.getTime());
+                eventsRef.child(String.valueOf(id+1)).child("owenerID").setValue(mAuth.getCurrentUser().getUid());
             }
         });
 
