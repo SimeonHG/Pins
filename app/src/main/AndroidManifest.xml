@@ -8,6 +8,9 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <application
         android:allowBackup="true"
@@ -16,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EventProfileActivity"></activity>
+        <activity android:name=".QRscannerActivity"></activity>
+        <activity android:name=".EventProfileActivity" />
         <activity android:name=".EventCreateActivity" />
         <activity android:name=".EventPickDateTimeActivity" />
         <activity android:name=".EventsActivity" />

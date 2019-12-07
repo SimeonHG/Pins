@@ -23,7 +23,7 @@ import java.util.Date;
 public class EventsActivity extends AppCompatActivity {
 
     private Button makeEventBtn;
-    private Button searchEvemtsBtn;
+    private Button searchEvemtsBtn, scanQRBtn;
     private EditText searchInputText;
 
     private RecyclerView Results;
@@ -38,6 +38,7 @@ public class EventsActivity extends AppCompatActivity {
         makeEventBtn = findViewById(R.id.makeEventBtn);
         searchEvemtsBtn = findViewById(R.id.searchEventsBtn);
         searchInputText = findViewById(R.id.inputEventTitle);
+        scanQRBtn = findViewById(R.id.eventScanQRBtn);
         Results = findViewById(R.id.eventSearchResults);
         Results.setHasFixedSize(true);
         Results.setLayoutManager(new LinearLayoutManager(this));
@@ -59,6 +60,14 @@ public class EventsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent makeAnEvent = new Intent(EventsActivity.this, EventPickDateTimeActivity.class);
                 startActivity(makeAnEvent);
+            }
+        });
+
+        scanQRBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent QRscanner = new Intent(EventsActivity.this, QRscannerActivity.class);
+                startActivity(QRscanner);
             }
         });
     }
