@@ -4,11 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.share.Share;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,10 +34,14 @@ import java.util.Date;
 public class EventProfileActivity extends AppCompatActivity {
 
     private TextView title, desc, time_start;
-    private String eventID;
-    private DatabaseReference eventsRef;
+    private String eventID, currentUserID;
+    private DatabaseReference eventsRef, usersRef;
     private FirebaseAuth mAuth;
     private ImageView QRcode;
+
+    private Button shareBtn;
+    private CallbackManager callbackManager;
+    private ShareDialog shareDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +55,23 @@ public class EventProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         QRcode = findViewById(R.id.qr_code);
+        shareBtn = findViewById(R.id.eventProfileShareBtn);
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+
 
 
         time_start = findViewById(R.id.eventProfileStartTime);
 
         eventID = getIntent().getExtras().get("visit_event_id").toString();
         mAuth = FirebaseAuth.getInstance();
+
+
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        currentUserID = mAuth.getCurrentUser().getUid();
+
         eventsRef = FirebaseDatabase.getInstance().getReference().child("Events");
         eventsRef.child(eventID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -89,5 +112,36 @@ public class EventProfileActivity extends AppCompatActivity {
 
             }
         });
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String text = " is attending " + title.getText() + " with ";
+
+
+                usersRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String userName = dataSnapshot.child(currentUserID).child("full_name").getValue().toString();
+
+                        ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                                .setQuote(userName + text)
+                                .setContentUrl(Uri.parse("https://www.google.com/"))
+                                .build();
+                        if(ShareDialog.canShow(ShareLinkContent.class)){
+                            shareDialog.show(linkContent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
+            }
+        });
     }
 }
+//TODO: kak se pravi attending post; koi oshte attend-va; possibly da ne e link? ;
