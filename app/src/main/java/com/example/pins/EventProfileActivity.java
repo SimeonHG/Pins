@@ -15,8 +15,10 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.share.Share;
+import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +37,7 @@ public class EventProfileActivity extends AppCompatActivity {
 
     private TextView title, desc, time_start;
     private String eventID, currentUserID;
-    private DatabaseReference eventsRef, usersRef;
+    private DatabaseReference eventsRef, usersRef, locationsRef, dbRef;
     private FirebaseAuth mAuth;
     private ImageView QRcode;
 
@@ -71,6 +73,9 @@ public class EventProfileActivity extends AppCompatActivity {
 
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         currentUserID = mAuth.getCurrentUser().getUid();
+
+        locationsRef = FirebaseDatabase.getInstance().getReference().child("Locations");
+        dbRef  = FirebaseDatabase.getInstance().getReference();
 
         eventsRef = FirebaseDatabase.getInstance().getReference().child("Events");
         eventsRef.child(eventID).addValueEventListener(new ValueEventListener() {
@@ -118,14 +123,20 @@ public class EventProfileActivity extends AppCompatActivity {
                 final String text = " is attending " + title.getText() + " with ";
 
 
-                usersRef.addValueEventListener(new ValueEventListener() {
+                dbRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String userName = dataSnapshot.child(currentUserID).child("full_name").getValue().toString();
+                        String userName = dataSnapshot.child("Users").child(currentUserID).child("full_name").getValue().toString();
+                        String latitude = dataSnapshot.child("Locations").child(currentUserID).child("last_location").child("latitude").getValue().toString();
+                        String longitude = dataSnapshot.child("Locations").child(currentUserID).child("last_location").child("latitude").getValue().toString();
+
 
                         ShareLinkContent linkContent = new ShareLinkContent.Builder()
                                 .setQuote(userName + text)
-                                .setContentUrl(Uri.parse("https://www.google.com/"))
+                                .setContentUrl(Uri.parse("https://www.google.com/maps/search/google+maps/@"+ latitude + "," + longitude +",15.89z"))
+                                .setShareHashtag(new ShareHashtag.Builder()
+                                    .setHashtag("#UsingPINS")
+                                    .build())
                                 .build();
                         if(ShareDialog.canShow(ShareLinkContent.class)){
                             shareDialog.show(linkContent);
