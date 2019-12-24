@@ -138,9 +138,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                                                //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
+                                                //
                                                 //System.out.println(flag);
-                                                mMap.addMarker(new MarkerOptions().position(latLng));
+                                                if(!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID)||dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))){
+                                                    // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
+                                                    mMap.addMarker(new MarkerOptions().position(latLng));
+                                                }
+                                                else {
+                                                    // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+
+                                                }
+
 
                                             }
                                         }
@@ -225,7 +233,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
                                                 //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
                                                 //System.out.println(flag);
-                                                mMap.addMarker(new MarkerOptions().position(latLng));
+                                                if(!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID)||dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))){
+                                                   // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
+                                                     mMap.addMarker(new MarkerOptions().position(latLng));
+                                                }
+                                                else {
+                                                   // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+
+                                                }
+
 
                                             }
                                         }

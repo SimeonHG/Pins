@@ -24,11 +24,11 @@ public class PersonProfileActivity extends AppCompatActivity {
 
 
     private TextView displayName, fullName, gender;
-    private DatabaseReference userRef, friendRequestRef, friendsRef;
+    private DatabaseReference userRef, friendRequestRef, friendsRef, blockedRef;
     private FirebaseAuth mAuth;
     private String senderUserID, receiverUserID;
-    private Button declineBtn, sendBtn, blockBtn;
-    private String CURRENT_STATE, dateBefriended;
+    private Button declineBtn, sendBtn, blockBtn, unblockBtn;
+    private String CURRENT_STATE, dateBefriended, dateBlocked, BLOCKED_STATE;
 
 
     @Override
@@ -42,6 +42,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("Friend_Requests");
         friendsRef = FirebaseDatabase.getInstance().getReference().child("Friendlists");
+        blockedRef = FirebaseDatabase.getInstance().getReference().child("Blocked");
 
         InitFields(); // TODO: every activity should be refactored like <- this
 
@@ -80,6 +81,9 @@ public class PersonProfileActivity extends AppCompatActivity {
             blockBtn.setVisibility(View.INVISIBLE);
             blockBtn.setEnabled(false);
 
+            unblockBtn.setVisibility(View.INVISIBLE);
+            unblockBtn.setEnabled(false);
+
 
         } else {
             sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -111,8 +115,37 @@ public class PersonProfileActivity extends AppCompatActivity {
                     }
                 }
             });
+            blockBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Block();
+                }
+            });
+            unblockBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Unblock();
+                }
+            });
+
+
         }
     }
+    private void Block(){
+        Calendar date = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        dateBlocked = currentDate.format(date.getTime());
+        blockedRef.child(senderUserID).child(receiverUserID)
+                .setValue(dateBlocked);
+        unblockBtn.setVisibility(View.VISIBLE);
+        unblockBtn.setEnabled(true);
+    }
+    private void Unblock(){
+        blockedRef.child(senderUserID).child(receiverUserID).removeValue();
+        unblockBtn.setVisibility(View.INVISIBLE);
+        unblockBtn.setEnabled(false);
+    }
+
 
     private void Unfriend() {
         friendsRef.child(senderUserID).child(receiverUserID)
@@ -273,6 +306,28 @@ public class PersonProfileActivity extends AppCompatActivity {
 
             }
         });
+        blockedRef.child(senderUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChild(receiverUserID)){
+                    blockBtn.setVisibility(View.INVISIBLE);
+                    blockBtn.setEnabled(false);
+                    unblockBtn.setVisibility(View.VISIBLE);
+                    unblockBtn.setEnabled(true);
+                }
+                else {
+                    unblockBtn.setVisibility(View.INVISIBLE);
+                    unblockBtn.setEnabled(false);
+                    blockBtn.setVisibility(View.VISIBLE);
+                    blockBtn.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void SendFriendRequest() {
@@ -311,6 +366,8 @@ public class PersonProfileActivity extends AppCompatActivity {
 
 
         blockBtn = findViewById(R.id.personBlockBtn);
+
+        unblockBtn = findViewById(R.id.personUblockBtn);
 
         CURRENT_STATE = "not_friends";// should change i think
 
