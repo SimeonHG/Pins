@@ -137,19 +137,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                                                //
-                                                //System.out.println(flag);
-                                                if(!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID)||dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))){
-                                                    // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
-                                                    mMap.addMarker(new MarkerOptions().position(latLng));
-                                                }
-                                                else {
-                                                    // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+                                            if(isInRadius(latLng, currentLatLng)) {
+                                                if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
+                                                    //
+                                                    //System.out.println(flag);
+                                                    if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID) || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
+                                                        // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
+                                                        mMap.addMarker(new MarkerOptions().position(latLng));
+                                                    } else {
+                                                        // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+
+                                                    }
+
 
                                                 }
-
-
                                             }
                                         }
 
@@ -230,19 +231,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                                                //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
-                                                //System.out.println(flag);
-                                                if(!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID)||dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))){
-                                                   // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
-                                                     mMap.addMarker(new MarkerOptions().position(latLng));
-                                                }
-                                                else {
-                                                   // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+                                            if(isInRadius(latLng, currentLatLng)) {
+                                                if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
+                                                    //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
+                                                    //System.out.println(flag);
+                                                    if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID) || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
+                                                        // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
+                                                        mMap.addMarker(new MarkerOptions().position(latLng));
+                                                    } else {
+                                                        // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+
+                                                    }
+
 
                                                 }
-
-
                                             }
                                         }
 
@@ -284,6 +286,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
+    }
+
+    private boolean isInRadius(LatLng latLng, LatLng currentLatLng) {
+        float[] distance = new float[1];
+        Location.distanceBetween(latLng.latitude, latLng.longitude, currentLatLng.latitude, currentLatLng.longitude, distance);
+        return distance[0] < 500000;
+        //TODO: make radius    ^ changeable (prob somewhere in the db)
     }
 
     private boolean IsFriend(final String userID) {
