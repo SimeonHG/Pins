@@ -51,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private  LatLng currentLatLng;
     private Marker currentLoc;
     private boolean flag;
+    private long rad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +218,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                             mMap.addCircle(new CircleOptions()
                                     .center(currentLatLng)
-                                    .radius(500.0)
+                                    .radius((float)rad)
                                     .fillColor(Color.argb(70, 150, 50, 50))
                             );
                             for(DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -290,9 +291,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private boolean isInRadius(LatLng latLng, LatLng currentLatLng) {
         float[] distance = new float[1];
+
         Location.distanceBetween(latLng.latitude, latLng.longitude, currentLatLng.latitude, currentLatLng.longitude, distance);
-        return distance[0] < 500000;
-        //TODO: make radius    ^ changeable (prob somewhere in the db)
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("Radiuses").hasChild(currentUserID)) {
+                    rad = (long) dataSnapshot.child("Radiuses").child(currentUserID).child("radius").getValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return distance[0] <= rad;
+
     }
 
     private boolean IsFriend(final String userID) {

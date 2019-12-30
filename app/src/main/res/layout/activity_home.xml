@@ -58,9 +58,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/homePageLogoutBtn"
+        android:layout_marginBottom="16dp"
         android:text="Edit Profile"
-        app:layout_constraintBottom_toTopOf="@+id/homePageLogoutBtn"
-        tools:layout_editor_absoluteX="3dp" />
+        app:layout_constraintBottom_toTopOf="@+id/settingsBtn"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/checkMapBtn"
@@ -85,4 +86,13 @@
         android:text="Events"
         app:layout_constraintBottom_toTopOf="@+id/findFriendsBtn"
         tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/settingsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Settings"
+        app:layout_constraintBottom_toTopOf="@+id/homePageLogoutBtn"
+        tools:layout_editor_absoluteX="160dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
