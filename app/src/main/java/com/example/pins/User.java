@@ -30,7 +30,6 @@ public class User {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
 
-
         result.put("display_name", display_name);
         result.put("full_name", full_name);
         result.put("gender", gender);

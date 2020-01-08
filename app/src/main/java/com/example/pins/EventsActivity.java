@@ -84,8 +84,6 @@ public class EventsActivity extends AppCompatActivity {
                 viewHolder.setTitle(event.title);
                 viewHolder.setDesc(event.desc);
                 viewHolder.setStartTime(String.valueOf(event.time_start));
-                //Toast.makeText(EventsActivity.this, "Username: "+ event.getTitle(),  Toast.LENGTH_SHORT).show();
-
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -98,10 +96,6 @@ public class EventsActivity extends AppCompatActivity {
                     }
                 });
             }
-
-
-
-
         };
         Results.setAdapter(firebaseRecyclerAdapter);
     }
@@ -126,7 +120,5 @@ public class EventsActivity extends AppCompatActivity {
             TextView eStartTime = (TextView) mView.findViewById(R.id.all_events_startTime);
             eStartTime.setText(startTime);
         }
-
-
     }
 }

@@ -110,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     final double latitude = location.getLatitude();
                     final double longitude = location.getLongitude();
-
+                    Toast.makeText(MapsActivity.this, "Network_provider", Toast.LENGTH_LONG).show();
                     currentLatLng = new LatLng(latitude, longitude);
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
@@ -140,17 +140,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             if(isInRadius(latLng, currentLatLng)) {
                                                 if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                                                    //
-                                                    //System.out.println(flag);
-                                                    if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID) || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
-                                                        // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
+                                                    if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID)
+                                                            || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
                                                         mMap.addMarker(new MarkerOptions().position(latLng));
-                                                    } else {
-                                                        // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
-
                                                     }
-
-
                                                 }
                                             }
                                         }
@@ -199,7 +192,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     final double latitude = location.getLatitude();
                     final double longitude = location.getLongitude();
-
+                    Toast.makeText(MapsActivity.this, "GPS provider", Toast.LENGTH_LONG).show();
                     currentLatLng = new LatLng(latitude, longitude);
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
@@ -233,6 +226,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             if(isInRadius(latLng, currentLatLng)) {
+                                                flag = false;
                                                 if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
                                                     //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
                                                     //System.out.println(flag);
@@ -300,10 +294,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     rad = (long) dataSnapshot.child("Radiuses").child(currentUserID).child("radius").getValue();
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
         return distance[0] <= rad;
@@ -311,27 +303,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private boolean IsFriend(final String userID) {
-        flag = false;
+        final boolean[] friendsFlag = new boolean[1];
 
-        ValueEventListener listener = new ValueEventListener() {
+        dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                    //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
-                    //System.out.println(flag);
-                    flag = true;
-
+                    friendsFlag[0] = true;
+                }
+                else {
+                    friendsFlag[0] = false;
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
-        };
+        });
 
-        dbRef.addListenerForSingleValueEvent(listener);
-
-        return flag;
+        return friendsFlag[0] == true;
     }
 }

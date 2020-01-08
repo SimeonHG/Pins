@@ -18,7 +18,7 @@
         tools:layout_editor_absoluteX="159dp" />
 
     <Button
-        android:id="@+id/homeProfile"
+        android:id="@+id/homeProfileBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -39,7 +39,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="52dp"
         android:text="Find Friends"
-        app:layout_constraintBottom_toTopOf="@+id/homeProfile"
+        app:layout_constraintBottom_toTopOf="@+id/homeProfileBtn"
         tools:layout_editor_absoluteX="16dp" />
 
     <Button

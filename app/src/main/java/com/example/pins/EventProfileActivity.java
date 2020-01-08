@@ -84,32 +84,22 @@ public class EventProfileActivity extends AppCompatActivity {
                 String db_title = dataSnapshot.child("title").getValue().toString();
                 String db_desc = dataSnapshot.child("desc").getValue().toString();
                 String db_start_time = (dataSnapshot.child("start_time_as_string").getValue().toString());
-                Toast.makeText(EventProfileActivity.this,dataSnapshot.child("ownerID").getValue().toString(), Toast.LENGTH_LONG).show();
                 if(mAuth.getCurrentUser().getUid().equals( dataSnapshot.child("ownerID").getValue().toString())){
                     MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
                     BitMatrix bitMatrix = null;
                     try {
                         bitMatrix = multiFormatWriter.encode(eventID, BarcodeFormat.QR_CODE, 500, 500);
-                        Toast.makeText(EventProfileActivity.this, "Ne baca", Toast.LENGTH_LONG).show();
-
                     } catch (WriterException e) {
                         e.printStackTrace();
                     }
-
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                     QRcode.setImageBitmap(bitmap);
                 }
-                else {
-                   // Toast.makeText(EventProfileActivity.this, "Ne vliza v if-a", Toast.LENGTH_LONG).show();
-                    //TODO: tuka pravim scanner-a
-                }
-
                 title.setText( db_title);
                 desc.setText(db_desc);
                 time_start.setText(db_start_time);
-
             }
 
             @Override
@@ -122,14 +112,12 @@ public class EventProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String text = " is attending " + title.getText() + " with ";
 
-
                 dbRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String userName = dataSnapshot.child("Users").child(currentUserID).child("full_name").getValue().toString();
                         String latitude = dataSnapshot.child("Locations").child(currentUserID).child("last_location").child("latitude").getValue().toString();
                         String longitude = dataSnapshot.child("Locations").child(currentUserID).child("last_location").child("latitude").getValue().toString();
-
 
                         ShareLinkContent linkContent = new ShareLinkContent.Builder()
                                 .setQuote(userName + text)

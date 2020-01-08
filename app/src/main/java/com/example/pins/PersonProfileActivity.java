@@ -38,15 +38,15 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         senderUserID = mAuth.getCurrentUser().getUid();
-        receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
+
         userRef = FirebaseDatabase.getInstance().getReference().child("Users");
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("Friend_Requests");
         friendsRef = FirebaseDatabase.getInstance().getReference().child("Friendlists");
         blockedRef = FirebaseDatabase.getInstance().getReference().child("Blocked");
 
         InitFields(); // TODO: every activity should be refactored like <- this
-
-        userRef.child(receiverUserID).addValueEventListener(new ValueEventListener() {
+        receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
+        userRef.child(receiverUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
@@ -57,7 +57,6 @@ public class PersonProfileActivity extends AppCompatActivity {
                     displayName.setText("@" + MyUserName);
                     fullName.setText(MyFullName);
                     gender.setText(MyGender);
-
 
                     MaintainUI();
                 }
@@ -214,7 +213,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                                                                 }
                                                             }
                                                         });
-                                                //CURRENT_STATE = "friends";
+
                                             }
                                         }
                                     });
@@ -266,7 +265,6 @@ public class PersonProfileActivity extends AppCompatActivity {
                     }
                     else if(request_type.equals("received")){
                         CURRENT_STATE = "request_received";
-
                         sendBtn.setText("Accept Friend Request");
 
                         declineBtn.setVisibility(View.VISIBLE);
@@ -279,7 +277,6 @@ public class PersonProfileActivity extends AppCompatActivity {
                             }
                         });
                     }
-
                 }
                 else {
                     friendsRef.child(senderUserID).addListenerForSingleValueEvent(new ValueEventListener() {

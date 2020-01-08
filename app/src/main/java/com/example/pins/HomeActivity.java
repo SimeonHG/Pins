@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         logoutBtn = findViewById(R.id.homePageLogoutBtn);
-        openProfile = findViewById(R.id.homeProfile);
+        openProfile = findViewById(R.id.homeProfileBtn);
         findFriends = findViewById(R.id.findFriendsBtn);
         editProfile = findViewById(R.id.editProfileBtn);
         checkMap = findViewById(R.id.checkMapBtn);
@@ -36,13 +36,12 @@ public class HomeActivity extends AppCompatActivity {
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAuth.signOut(); //this will logout of Firebase
-                LoginManager.getInstance().logOut(); //this will logout of Facebook
+                mAuth.signOut(); //this will logout from Firebase
+                LoginManager.getInstance().logOut(); //this will logout from Facebook
                 updateUI();
 
             }
         });
-
         openProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,8 +49,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(profilePage);
             }
         });
-
-
         findFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +56,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(findFriendsPage);
             }
         });
-
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +63,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(editProfile);
             }
         });
-
         checkMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,7 +70,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(maps);
             }
         });
-
         events.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +77,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(eventsPage);
             }
         });
-
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,7 +89,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null){
             updateUI();

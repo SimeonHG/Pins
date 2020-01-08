@@ -129,7 +129,6 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
 
                             Intent eventPage = new Intent(QRscannerActivity.this, EventProfileActivity.class);
                             eventPage.putExtra("visit_event_id", scanResult);
-
                             startActivity(eventPage);
 
                         }

@@ -41,12 +41,8 @@ public class EventCreateActivity extends AppCompatActivity {
         desc = findViewById(R.id.createDesc);
 
         createEventBtn = findViewById(R.id.createEventBtn);
-
         mAuth = FirebaseAuth.getInstance();
-
         test.setText(start_date.getTime().toString());
-
-
         eventsRef = FirebaseDatabase.getInstance().getReference("Events");
 
         eventsRef.addValueEventListener(new ValueEventListener() {
@@ -59,7 +55,6 @@ public class EventCreateActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
 
@@ -74,7 +69,5 @@ public class EventCreateActivity extends AppCompatActivity {
                 eventsRef.child(String.valueOf(id+1)).child("ownerID").setValue(mAuth.getCurrentUser().getUid());
             }
         });
-
-
     }
 }

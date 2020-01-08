@@ -47,10 +47,6 @@ public class EventPickDateTimeActivity extends AppCompatActivity {
                     startActivity(makeAnEvent);
                 }
 
-
-
-
-
             }
         });
     }

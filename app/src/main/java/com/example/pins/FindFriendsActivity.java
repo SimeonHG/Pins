@@ -56,7 +56,6 @@ public class FindFriendsActivity extends AppCompatActivity {
     }
 
     private void SearchPeople(String input) {
-
         Query searchPeopleQuery = allUsersRef.orderByChild("full_name").startAt(input).endAt(input + "\uf8ff");
 
         FirebaseRecyclerAdapter<User,FindFriendsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, FindFriendsViewHolder>
@@ -81,10 +80,6 @@ public class FindFriendsActivity extends AppCompatActivity {
                     }
                 });
             }
-
-
-
-
         };
         Results.setAdapter(firebaseRecyclerAdapter);
     }
