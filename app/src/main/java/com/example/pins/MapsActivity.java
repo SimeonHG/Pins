@@ -232,38 +232,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             );
                             for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                                 //  Toast.makeText(MapsActivity.this, "hellooooooo", Toast.LENGTH_LONG).show();
-                                double db_latitude = (double) snapshot.child("last_location").child("latitude").getValue();
-                                double db_longitude = (double) snapshot.child("last_location").child("longitude").getValue();
-                                final LatLng latLng = new LatLng(db_latitude, db_longitude);
-                                //allFriendsLocations.add(latLng);
-                                if(latitude != db_latitude && longitude!=db_longitude) {
-                                    final String userID = snapshot.getKey();
-                                    dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if(isInRadius(latLng, currentLatLng)) {
-                                                flag = false;
-                                                if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                                                    //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
-                                                    //System.out.println(flag);
-                                                    if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID) || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
-                                                        // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
-                                                        mMap.addMarker(new MarkerOptions().position(latLng));
-                                                    } else {
-                                                        // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+                                if(snapshot.hasChild("last_location")){
+                                    double db_latitude = (double) snapshot.child("last_location").child("latitude").getValue();
+                                    double db_longitude = (double) snapshot.child("last_location").child("longitude").getValue();
+                                    final LatLng latLng = new LatLng(db_latitude, db_longitude);
+                                    //allFriendsLocations.add(latLng);
+                                    if(latitude != db_latitude && longitude!=db_longitude) {
+                                        final String userID = snapshot.getKey();
+                                        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (isInRadius(latLng, currentLatLng)) {
+                                                    flag = false;
+                                                    if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
+                                                        //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
+                                                        //System.out.println(flag);
+                                                        if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID) || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
+                                                            // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
+                                                            mMap.addMarker(new MarkerOptions().position(latLng));
+                                                        } else {
+                                                            // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
+
+                                                        }
+
 
                                                     }
-
-
                                                 }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                        }
-                                    });
+                                            }
+                                        });
+                                    }
                                 }
                             }
                         }
