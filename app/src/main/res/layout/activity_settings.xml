@@ -34,4 +34,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsRadTextView" />
 
+    <Switch
+        android:id="@+id/visibilitySwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginLeft="92dp"
+        android:layout_marginTop="64dp"
+        android:text="Visibility"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/settingsSaveRadBtn" />
+
+    <TextView
+        android:id="@+id/settingsVisibilityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.078"
+        app:layout_constraintStart_toEndOf="@+id/visibilitySwitch"
+        app:layout_constraintTop_toBottomOf="@+id/settingsSaveRadBtn" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

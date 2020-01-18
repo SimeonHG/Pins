@@ -25,7 +25,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="52dp"
         android:text="Profile"
         app:layout_constraintBottom_toTopOf="@+id/editProfileBtn"
         tools:layout_editor_absoluteX="0dp" />
@@ -37,7 +36,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="52dp"
         android:text="Find Friends"
         app:layout_constraintBottom_toTopOf="@+id/homeProfileBtn"
         tools:layout_editor_absoluteX="16dp" />
@@ -70,7 +68,6 @@
         android:layout_above="@+id/editProfileBtn"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="52dp"
         android:text="Check The  Map"
         app:layout_constraintBottom_toTopOf="@+id/eventsBtn"
         tools:layout_editor_absoluteX="16dp" />
@@ -82,7 +79,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="52dp"
         android:text="Events"
         app:layout_constraintBottom_toTopOf="@+id/findFriendsBtn"
         tools:layout_editor_absoluteX="16dp" />

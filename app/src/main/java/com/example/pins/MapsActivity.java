@@ -52,7 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String currentUserID;
     private  LatLng currentLatLng;
     private Marker currentLoc;
-    private boolean flag;
+    private boolean friendsFlag;
     private long rad;
 
     @Override
@@ -109,14 +109,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
+                    //TODO update-ni lastKnownLoc vuv firebase?
 
                     final double latitude = location.getLatitude();
                     final double longitude = location.getLongitude();
-                    Toast.makeText(MapsActivity.this, "Network_provider", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapsActivity.this, "GPS provider", Toast.LENGTH_LONG).show();
                     currentLatLng = new LatLng(latitude, longitude);
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
                     locationsRef.child(currentUserID).child("last_location").child("longitude").setValue(longitude);
+                    currentLoc = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
 
                     Calendar rightNow = Calendar.getInstance();
                     int hours = rightNow.get(Calendar.HOUR_OF_DAY);
@@ -125,7 +127,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         locationsRef.child(currentUserID).child(String.valueOf(hours)).child("longitude").setValue(longitude);
                     }
 
-                    // final List<LatLng> allFriendsLocations = new ArrayList<>();
                     locationsRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -133,38 +134,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             currentLoc = mMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(latitude,longitude))
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                            );                            mMap.addCircle(new CircleOptions()
+                            );
+
+                            mMap.addCircle(new CircleOptions()
                                     .center(currentLatLng)
-                                    .radius(500.0)
-                                    .fillColor(Color.argb(70, 150, 50, 50)));
-                            for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                 Toast.makeText(MapsActivity.this, "hellooooooo", Toast.LENGTH_LONG).show();
-                                double db_latitude = (double) snapshot.child("last_location").child("latitude").getValue();
-                                double db_longitude = (double) snapshot.child("last_location").child("longitude").getValue();
-                                final LatLng latLng = new LatLng(db_latitude, db_longitude);
-                                if(latitude != db_latitude && longitude!=db_longitude) {
-                                    final String userID = snapshot.getKey();
-                                    dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if(isInRadius(latLng, currentLatLng)) {
-                                                if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                                                    if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID)
-                                                            || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
-                                                        mMap.addMarker(new MarkerOptions().position(latLng));
-                                                    }
+                                    .radius((float)rad)
+                                    .fillColor(Color.argb(70, 150, 50, 50))
+                            );
+                            for(final DataSnapshot user : dataSnapshot.getChildren()){
+                                if(user.hasChild("last_location")) {
+                                    final double user_latitude = (double) user.child("last_location").child("latitude").getValue();
+                                    final double user_longitude = (double) user.child("last_location").child("longitude").getValue();
+                                    System.out.println("user: " + user.getKey());
+                                    if (!currentUserID.equals(user.getKey())
+                                            && isInRadius(new LatLng(user_latitude, user_longitude), currentLatLng)
+                                            && (user.hasChild("visible") && (boolean)user.child("visible").getValue())
+                                    )
+                                    {
+                                        dbRef.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if(dataSnapshot.child("Friendlists").child(currentUserID).hasChild(user.getKey())
+                                                        && !dataSnapshot.child("Blocked").child(currentUserID).hasChild(user.getKey())
+                                                )
+                                                {
+                                                    mMap.addMarker(new MarkerOptions().position(new LatLng(user_latitude, user_longitude)));
                                                 }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                        }
-                                    });
+                                            }
+                                        });
+
+                                    }
                                 }
-                                //allFriendsLocations.add(latLng);
                             }
+
+
                         }
 
                         @Override
@@ -173,8 +181,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     });
 
-
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng));
 
                 }
 
@@ -215,7 +222,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         locationsRef.child(currentUserID).child(String.valueOf(hours)).child("longitude").setValue(longitude);
                     }
 
-                    //final List<LatLng> allFriendsLocations = new ArrayList<>();
                     locationsRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -230,33 +236,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     .radius((float)rad)
                                     .fillColor(Color.argb(70, 150, 50, 50))
                             );
-                            for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                //  Toast.makeText(MapsActivity.this, "hellooooooo", Toast.LENGTH_LONG).show();
-                                if(snapshot.hasChild("last_location")){
-                                    double db_latitude = (double) snapshot.child("last_location").child("latitude").getValue();
-                                    double db_longitude = (double) snapshot.child("last_location").child("longitude").getValue();
-                                    final LatLng latLng = new LatLng(db_latitude, db_longitude);
-                                    //allFriendsLocations.add(latLng);
-                                    if(latitude != db_latitude && longitude!=db_longitude) {
-                                        final String userID = snapshot.getKey();
-                                        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            for(final DataSnapshot user : dataSnapshot.getChildren()){
+                                if(user.hasChild("last_location")) {
+                                    final double user_latitude = (double) user.child("last_location").child("latitude").getValue();
+                                    final double user_longitude = (double) user.child("last_location").child("longitude").getValue();
+                                    System.out.println("user: " + user.getKey());
+                                    if (!currentUserID.equals(user.getKey())
+                                            && isInRadius(new LatLng(user_latitude, user_longitude), currentLatLng)
+                                            && (user.hasChild("visible") && (boolean)user.child("visible").getValue())
+                                            )
+                                    {
+                                        dbRef.addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                if (isInRadius(latLng, currentLatLng)) {
-                                                    flag = false;
-                                                    if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                                                        //Toast.makeText(MapsActivity.this, currentUserID, Toast.LENGTH_LONG).show();
-                                                        //System.out.println(flag);
-                                                        if (!(dataSnapshot.child("Blocked").child(currentUserID).hasChild(userID) || dataSnapshot.child("Blocked").child(userID).hasChild(currentUserID))) {
-                                                            // Toast.makeText(MapsActivity.this, "ne eblokiran ", Toast.LENGTH_LONG).show();
-                                                            mMap.addMarker(new MarkerOptions().position(latLng));
-                                                        } else {
-                                                            // Toast.makeText(MapsActivity.this, "blokiran", Toast.LENGTH_LONG).show();
-
-                                                        }
-
-
-                                                    }
+                                                if(dataSnapshot.child("Friendlists").child(currentUserID).hasChild(user.getKey())
+                                                && !dataSnapshot.child("Blocked").child(currentUserID).hasChild(user.getKey())
+                                                )
+                                                {
+                                                    mMap.addMarker(new MarkerOptions().position(new LatLng(user_latitude, user_longitude)));
                                                 }
                                             }
 
@@ -265,9 +262,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                             }
                                         });
+
                                     }
                                 }
                             }
+
+
                         }
 
                         @Override
@@ -301,6 +301,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+
+
     private boolean isInRadius(LatLng latLng, LatLng currentLatLng) {
         float[] distance = new float[1];
 
@@ -320,24 +322,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private boolean IsFriend(final String userID) {
-        final boolean[] friendsFlag = new boolean[1];
 
-        dbRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("Friendlists").child(currentUserID).hasChild(userID)) {
-                    friendsFlag[0] = true;
-                }
-                else {
-                    friendsFlag[0] = false;
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-
-        return friendsFlag[0] == true;
-    }
 }
