@@ -46,7 +46,8 @@ public class HomeActivity extends AppCompatActivity {
         openProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent profilePage = new Intent(HomeActivity.this, UserProfileActivity.class);
+                Intent profilePage = new Intent(HomeActivity.this, PersonProfileActivity.class);
+                profilePage.putExtra("visit_user_id", mAuth.getCurrentUser().getUid());
                 startActivity(profilePage);
             }
         });

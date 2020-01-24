@@ -134,6 +134,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             currentLoc = mMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(latitude,longitude))
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+
                             );
 
                             mMap.addCircle(new CircleOptions()
@@ -158,7 +159,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                         && !dataSnapshot.child("Blocked").child(currentUserID).hasChild(user.getKey())
                                                 )
                                                 {
-                                                    mMap.addMarker(new MarkerOptions().position(new LatLng(user_latitude, user_longitude)));
+                                                    mMap.addMarker(new MarkerOptions()
+                                                            .position(new LatLng(user_latitude, user_longitude))
+                                                            .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+
+                                                    );
                                                 }
                                             }
 
@@ -229,6 +234,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             currentLoc = mMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(latitude,longitude))
                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+
                             );
 
                             mMap.addCircle(new CircleOptions()
@@ -253,7 +259,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                                 && !dataSnapshot.child("Blocked").child(currentUserID).hasChild(user.getKey())
                                                 )
                                                 {
-                                                    mMap.addMarker(new MarkerOptions().position(new LatLng(user_latitude, user_longitude)));
+                                                    mMap.addMarker(new MarkerOptions()
+                                                            .position(new LatLng(user_latitude, user_longitude))
+                                                            .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+
+                                                    );
                                                 }
                                             }
 

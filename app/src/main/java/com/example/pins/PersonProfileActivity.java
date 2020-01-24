@@ -312,7 +312,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                     unblockBtn.setVisibility(View.VISIBLE);
                     unblockBtn.setEnabled(true);
                 }
-                else {
+                else if(!senderUserID.equals(receiverUserID)){
                     unblockBtn.setVisibility(View.INVISIBLE);
                     unblockBtn.setEnabled(false);
                     blockBtn.setVisibility(View.VISIBLE);
