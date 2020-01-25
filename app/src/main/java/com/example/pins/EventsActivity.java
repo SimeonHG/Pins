@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class EventsActivity extends AppCompatActivity {
@@ -73,7 +75,16 @@ public class EventsActivity extends AppCompatActivity {
     }
 
     private void SearchEvents(String input) {
-        Query searchEventsQuery = eventsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff");
+        java.text.SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Calendar date = Calendar.getInstance();
+
+
+        Date newDate = new Date(date.getTime().getTime() - (2 * 24 * 60 * 60 * 1000));
+        String formattedNewDate = sdf.format(newDate.getTime());
+
+        Query test = eventsRef.orderByChild("date_start").startAt(formattedNewDate).endAt(sdf.format(date.getTime()));
+        Query searchEventsQuery = (eventsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff"));
 
         FirebaseRecyclerAdapter<Event, EventsActivity.FindEventsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Event, EventsActivity.FindEventsViewHolder>
                 (
@@ -81,20 +92,25 @@ public class EventsActivity extends AppCompatActivity {
                 ) {
             @Override
             protected void populateViewHolder(EventsActivity.FindEventsViewHolder viewHolder, Event event, final int position) {
-                viewHolder.setTitle(event.title);
-                viewHolder.setDesc(event.desc);
-                viewHolder.setStartTime(String.valueOf(event.time_start));
+                if(event.time_start.after(new Date( Calendar.getInstance().getTime().getTime()- (2 * 24 * 60 * 60 * 1000)))) {
+                    viewHolder.setTitle(event.title);
+                    viewHolder.setDesc(event.desc);
+                    viewHolder.setStartTime(String.valueOf(event.time_start));
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String visit_event_id = getRef(position).getKey();
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String visit_event_id = getRef(position).getKey();
 
-                        Intent eventIntent = new Intent(EventsActivity.this, EventProfileActivity.class);
-                        eventIntent.putExtra("visit_event_id", visit_event_id);
-                        startActivity(eventIntent);
-                    }
-                });
+                            Intent eventIntent = new Intent(EventsActivity.this, EventProfileActivity.class);
+                            eventIntent.putExtra("visit_event_id", visit_event_id);
+                            startActivity(eventIntent);
+                        }
+                    });
+                }
+                else {
+                    viewHolder.invisible();
+                }
             }
         };
         Results.setAdapter(firebaseRecyclerAdapter);
@@ -119,6 +135,13 @@ public class EventsActivity extends AppCompatActivity {
         public void setStartTime(String startTime){
             TextView eStartTime = (TextView) mView.findViewById(R.id.all_events_startTime);
             eStartTime.setText(startTime);
+        }
+
+        public void invisible() {
+            mView.findViewById(R.id.viewHolderLayout).setVisibility(View.GONE);
+            mView.findViewById(R.id.all_events_title).setVisibility(View.GONE);
+            mView.findViewById(R.id.all_events_desc).setVisibility(View.GONE);
+            mView.findViewById(R.id.all_events_startTime).setVisibility(View.GONE);
         }
     }
 }

@@ -132,7 +132,7 @@ public class PersonProfileActivity extends AppCompatActivity {
     }
     private void Block(){
         Calendar date = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
         dateBlocked = currentDate.format(date.getTime());
         blockedRef.child(senderUserID).child(receiverUserID)
                 .setValue(dateBlocked);

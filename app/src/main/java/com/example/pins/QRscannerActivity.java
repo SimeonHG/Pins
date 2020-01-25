@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,7 +36,7 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
 
     private static final int REQUEST_CAMERA =1;
     private ZXingScannerView scannerView;
-    private DatabaseReference eventsRef;
+    private DatabaseReference eventsRef, dbRef;
     private FirebaseAuth mAuth;
     private String currentUserId;
 
@@ -46,6 +47,7 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
         setContentView(scannerView);
         mAuth = FirebaseAuth.getInstance();
         eventsRef = FirebaseDatabase.getInstance().getReference("Events");
+        dbRef = FirebaseDatabase.getInstance().getReference();
         currentUserId = mAuth.getCurrentUser().getUid();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
@@ -124,8 +126,34 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
 
                             Date date_attended = date.getTime();
 
+                            final String ownerID = dataSnapshot.child("ownerID").getValue().toString();
+
                             eventsRef.child(scanResult).child("guests").child(currentUserId).child("date")
                                     .setValue(date_attended.toString());
+
+                            eventsRef.child(scanResult).child("guests").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    System.out.println("hello1");
+                                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                                        System.out.println("hello2");
+                                        System.out.println("==========="+currentUserId+"//"+snapshot.getKey()+"//");
+                                        if(!currentUserId.equals(snapshot.getKey())) {
+                                            increaseScore(snapshot.getKey());
+                                        }
+
+
+                                    }
+                                    if(!currentUserId.equals(ownerID)) {
+                                        increaseScore(ownerID);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
 
                             Intent eventPage = new Intent(QRscannerActivity.this, EventProfileActivity.class);
                             eventPage.putExtra("visit_event_id", scanResult);
@@ -188,6 +216,30 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
 //        AlertDialog alertDialog = builder.create();
 //        alertDialog.show();
     }
+
+    private void increaseScore(final String user) {
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long score;
+                if(dataSnapshot.child("Scores").child(user).hasChild(currentUserId)) {
+                    score = (long) dataSnapshot.child("Scores").child(user).child(currentUserId).getValue();
+                    score += 1;
+                } else {
+                    score = 1;
+                }
+                dbRef.child("Scores").child(user).child(currentUserId).setValue(score);
+                dbRef.child("Scores").child(currentUserId).child(user).setValue(score);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     @Override
     public void onDestroy() {
 
