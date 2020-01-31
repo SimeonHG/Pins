@@ -45,7 +45,7 @@
             android:layout_toEndOf="@+id/search_input"
             android:layout_toRightOf="@+id/search_input"
             android:text="Q"
-            android:textSize="30dp"/>
+            android:textSize="30sp"/>
 
 
     </RelativeLayout>

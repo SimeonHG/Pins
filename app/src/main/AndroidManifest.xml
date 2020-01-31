@@ -33,10 +33,11 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity
-            android:name=".HeatmapActivity"
-            ></activity>
+        <activity android:name=".HeatmapActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".QRscannerActivity" />
         <activity android:name=".EventProfileActivity" />
@@ -46,22 +47,14 @@
         <activity android:name=".MapsActivity" />
         <activity android:name=".PersonProfileActivity" />
         <activity android:name=".FindFriendsActivity" />
-        <activity android:name=".UserProfileActivity" />
         <activity android:name=".EditProfileActivity" />
-        <activity android:name=".MyProfileActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

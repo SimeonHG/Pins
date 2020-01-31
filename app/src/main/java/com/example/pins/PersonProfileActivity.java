@@ -24,11 +24,30 @@ public class PersonProfileActivity extends AppCompatActivity {
 
 
     private TextView displayName, fullName, gender;
-    private DatabaseReference userRef, friendRequestRef, friendsRef, blockedRef;
+    private DatabaseReference userRef;
+    private DatabaseReference friendRequestRef;
+    private DatabaseReference friendsRef;
+    private DatabaseReference blockedRef;
+
     private FirebaseAuth mAuth;
-    private String senderUserID, receiverUserID;
-    private Button declineBtn, sendBtn, blockBtn, unblockBtn;
-    private String CURRENT_STATE, dateBefriended, dateBlocked, BLOCKED_STATE;
+    private String senderUserID;
+    private String receiverUserID;
+    private Button declineBtn;
+    private Button sendBtn;
+    private Button blockBtn;
+    private Button unblockBtn;
+
+    private FriendshipStatus friendshipStatus;
+    private String dateBefriended;
+    private String dateBlocked;
+
+    private enum FriendshipStatus {
+        NOT_FRIENDS,
+        FRIENDS,
+        REQUEST_SENT,
+        REQUEST_RECEIVED
+    }
+
 
 
     @Override
@@ -50,13 +69,13 @@ public class PersonProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    String MyUserName = dataSnapshot.child("display_name").getValue().toString();
-                    String MyFullName = dataSnapshot.child("full_name").getValue().toString();
-                    String MyGender = dataSnapshot.child("gender").getValue().toString();
+                    String userName = dataSnapshot.child("display_name").getValue().toString();
+                    String userFullName = dataSnapshot.child("full_name").getValue().toString();
+                    String userGender = dataSnapshot.child("gender").getValue().toString();
 
-                    displayName.setText("@" + MyUserName);
-                    fullName.setText(MyFullName);
-                    gender.setText(MyGender);
+                    displayName.setText("@" + userName);
+                    fullName.setText(userFullName);
+                    gender.setText(userGender);
 
                     MaintainUI();
                 }
@@ -89,28 +108,25 @@ public class PersonProfileActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     sendBtn.setEnabled(false);
-                    if(CURRENT_STATE.equals("not_friends")){
+                    switch (friendshipStatus) {
+                        case NOT_FRIENDS:
+                            declineBtn.setVisibility(View.INVISIBLE);
+                            declineBtn.setEnabled(false);
 
-                        declineBtn.setVisibility(View.INVISIBLE);
-                        declineBtn.setEnabled(false);
+                            SendFriendRequest();
+                            break;
+                        case REQUEST_SENT:
+                            declineBtn.setVisibility(View.INVISIBLE);
+                            declineBtn.setEnabled(false);
 
-                        SendFriendRequest();
-                    }
-
-                    if(CURRENT_STATE.equals("request_sent")){
-
-                        declineBtn.setVisibility(View.INVISIBLE);
-                        declineBtn.setEnabled(false);
-
-                        CancelFriendRequest();
-                    }
-                    if(CURRENT_STATE.equals("request_received")){
-
-                        AcceptFriendRequest();
-                    }
-                    if(CURRENT_STATE.equals("friends")){
-
-                        Unfriend();
+                            CancelFriendRequest();
+                            break;
+                        case REQUEST_RECEIVED:
+                            AcceptFriendRequest();
+                            break;
+                        case FRIENDS:
+                            Unfriend();
+                            break;
                     }
                 }
             });
@@ -134,8 +150,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         Calendar date = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
         dateBlocked = currentDate.format(date.getTime());
-        blockedRef.child(senderUserID).child(receiverUserID)
-                .setValue(dateBlocked);
+        blockedRef.child(senderUserID).child(receiverUserID).setValue(dateBlocked);
         unblockBtn.setVisibility(View.VISIBLE);
         unblockBtn.setEnabled(true);
     }
@@ -160,7 +175,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
                                                 sendBtn.setEnabled(true); //true?
-                                                CURRENT_STATE = "not_friends";
+                                                friendshipStatus = FriendshipStatus.NOT_FRIENDS;
                                                 sendBtn.setText("Send Friend Request");
 
                                                 declineBtn.setVisibility(View.INVISIBLE);
@@ -175,7 +190,7 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     private void AcceptFriendRequest() {
         Calendar date = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
         dateBefriended = currentDate.format(date.getTime());
 
         friendsRef.child(senderUserID).child(receiverUserID).child("date").setValue(dateBefriended)
@@ -202,7 +217,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                                     if(task.isSuccessful()){
                                                                                         sendBtn.setEnabled(true); //true?
-                                                                                        CURRENT_STATE = "friends";
+                                                                                        friendshipStatus = FriendshipStatus.FRIENDS;
                                                                                         sendBtn.setText("Unfriend");
 
                                                                                         declineBtn.setVisibility(View.INVISIBLE);
@@ -236,7 +251,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 sendBtn.setEnabled(true); //true?
-                                CURRENT_STATE = "not_friends";
+                                friendshipStatus = FriendshipStatus.NOT_FRIENDS;
                                 sendBtn.setText("Send Friend Request");
 
                                 declineBtn.setVisibility(View.INVISIBLE);
@@ -257,14 +272,14 @@ public class PersonProfileActivity extends AppCompatActivity {
                     String request_type = dataSnapshot.child(receiverUserID).child("request_type").getValue().toString();
 
                     if(request_type.equals("sent")){
-                        CURRENT_STATE = "request_sent";
+                        friendshipStatus = FriendshipStatus.REQUEST_SENT;
                         sendBtn.setText("Cancel Friend Request");
 
                         declineBtn.setVisibility(View.INVISIBLE);
                         declineBtn.setEnabled(false);
                     }
                     else if(request_type.equals("received")){
-                        CURRENT_STATE = "request_received";
+                        friendshipStatus = FriendshipStatus.REQUEST_RECEIVED;
                         sendBtn.setText("Accept Friend Request");
 
                         declineBtn.setVisibility(View.VISIBLE);
@@ -283,7 +298,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(dataSnapshot.hasChild(receiverUserID)){
-                                CURRENT_STATE = "friends";
+                                friendshipStatus = FriendshipStatus.FRIENDS;
                                 sendBtn.setText("Unfriend");
                                 declineBtn.setVisibility(View.INVISIBLE);
                                 declineBtn.setEnabled(false);
@@ -339,7 +354,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if(task.isSuccessful()){
                                 sendBtn.setEnabled(true); //true?
-                                CURRENT_STATE = "request_sent";
+                                friendshipStatus = FriendshipStatus.REQUEST_SENT;
                                 sendBtn.setText("Cancel Friend Request");
 
                                 declineBtn.setVisibility(View.INVISIBLE);
@@ -366,7 +381,9 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         unblockBtn = findViewById(R.id.personUblockBtn);
 
-        CURRENT_STATE = "not_friends";// should change i think
+        friendshipStatus = FriendshipStatus.NOT_FRIENDS;// should change i think
+        declineBtn.setVisibility(View.INVISIBLE);
+        declineBtn.setEnabled(false);
 
 
     }

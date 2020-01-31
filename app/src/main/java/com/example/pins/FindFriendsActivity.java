@@ -26,7 +26,7 @@ public class FindFriendsActivity extends AppCompatActivity {
     private Button searchBtn;
     private EditText searchInputText;
 
-    private RecyclerView Results;
+    private RecyclerView friendsList;
 
     private DatabaseReference  allUsersRef;
 
@@ -36,15 +36,16 @@ public class FindFriendsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_find_friends);
 
 
-        Results = (RecyclerView) findViewById(R.id.recycler);
-        Results.setHasFixedSize(true);
-        Results.setLayoutManager(new LinearLayoutManager(this));
+        friendsList = findViewById(R.id.recycler);
+        friendsList.setHasFixedSize(true);
+        friendsList.setLayoutManager(new LinearLayoutManager(this));
 
-        searchBtn = findViewById(R.id.search_button);
+
         searchInputText = findViewById(R.id.search_input);
 
 
         allUsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        searchBtn = findViewById(R.id.search_button);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,16 +59,13 @@ public class FindFriendsActivity extends AppCompatActivity {
     private void SearchPeople(String input) {
         Query searchPeopleQuery = allUsersRef.orderByChild("full_name").startAt(input).endAt(input + "\uf8ff");
 
-        FirebaseRecyclerAdapter<User,FindFriendsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, FindFriendsViewHolder>
+        FirebaseRecyclerAdapter<User, FindFriendsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, FindFriendsViewHolder>
                 (
                     User.class, R.layout.all_users_display_layout, FindFriendsViewHolder.class, searchPeopleQuery
                 ) {
             @Override
             protected void populateViewHolder(FindFriendsViewHolder viewHolder, User user, final int position) {
-                viewHolder.setFullname(user.full_name);
-                viewHolder.setDisplayname(user.display_name);
-                Toast.makeText(FindFriendsActivity.this, "Username: "+ user.display_name,  Toast.LENGTH_SHORT).show();
-                viewHolder.setGender(user.gender);
+                viewHolder.displayUser(user);
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -81,30 +79,28 @@ public class FindFriendsActivity extends AppCompatActivity {
                 });
             }
         };
-        Results.setAdapter(firebaseRecyclerAdapter);
+        friendsList.setAdapter(firebaseRecyclerAdapter);
     }
 
     public static class FindFriendsViewHolder extends RecyclerView.ViewHolder{
-        View mView;
+        private View mView;
+        private TextView fullName;
+        private TextView displayName;
+        private TextView gender;
 
         public FindFriendsViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
-        }
-
-        public void setFullname(String fullname){
-            TextView fullName = (TextView) mView.findViewById(R.id.all_users_fullname);
-            fullName.setText(fullname);
-        }
-        public void setDisplayname(String displayname){
-            TextView displayName = (TextView) mView.findViewById(R.id.all_users_display);
-            displayName.setText(displayname);
-        }
-        public void setGender(String gender){
-            TextView gen = (TextView) mView.findViewById(R.id.all_users_gender);
-            gen.setText(gender);
+            fullName = itemView.findViewById(R.id.all_users_fullname);
+            displayName = itemView.findViewById(R.id.all_users_display);
+            gender = itemView.findViewById(R.id.all_users_gender);
         }
 
 
+        void displayUser(User user) {
+            fullName.setText(user.full_name);
+            displayName.setText(user.display_name);
+            gender.setText(user.gender);
+        }
     }
 }

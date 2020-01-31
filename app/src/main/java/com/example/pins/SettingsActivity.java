@@ -93,7 +93,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void manipulateSeekbar(){
-        radiusText.setText(seekBar.getProgress() + "km");
+
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progress_value;
@@ -115,11 +115,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(progress_value >= 16){
-                    radiusText.setText(progress_value/4 + "." +(progress_value%4)*250 + "km");
-                }else {
-                    radiusText.setText(progress_value*250 + "m");
-                }
+               
             }
         });
     }
