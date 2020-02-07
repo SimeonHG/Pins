@@ -58,13 +58,11 @@ public class HeatmapActivity extends FragmentActivity implements OnMapReadyCallb
                         double latitude = (double)snapshot.child("12").child("latitude").getValue();
                         double longitude = (double)snapshot.child("12").child("longitude").getValue();
                         data.add(new LatLng(latitude, longitude));
-                        System.out.println(latitude + " / " + longitude  + " ->" + data.size());
                     }
                     if (snapshot.hasChild("18")) {
                         double latitude = (double)snapshot.child("18").child("latitude").getValue();
                         double longitude = (double)snapshot.child("18").child("longitude").getValue();
                         data.add(new LatLng(latitude, longitude));
-                        System.out.println(latitude + " / " + longitude  + " ->" + data.size());
                     }
                 }
                 HeatmapTileProvider mProvider = new HeatmapTileProvider.Builder()

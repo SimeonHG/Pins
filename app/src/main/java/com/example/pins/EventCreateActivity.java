@@ -70,7 +70,6 @@ public class EventCreateActivity extends AppCompatActivity {
                 String formattedStartTime = sdf.format(start_date.getTime());
                 eventsRef.child(String.valueOf(id+1)).child("date_start").setValue(formattedStartTime);
                 eventsRef.child(String.valueOf(id+1)).child("time_start").setValue(start_date.getTime());
-                eventsRef.child(String.valueOf(id+1)).child("start_time_as_string").setValue(start_date.getTime().toString());
                 eventsRef.child(String.valueOf(id+1)).child("ownerID").setValue(mAuth.getCurrentUser().getUid());
                 Intent eventsPage = new Intent(EventCreateActivity.this, EventsActivity.class);
                 startActivity(eventsPage);

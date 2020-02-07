@@ -150,7 +150,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         Calendar date = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
         dateBlocked = currentDate.format(date.getTime());
-        blockedRef.child(senderUserID).child(receiverUserID).setValue(dateBlocked);
+        blockedRef.child(senderUserID).child(receiverUserID).child("date").setValue(dateBlocked);
         unblockBtn.setVisibility(View.VISIBLE);
         unblockBtn.setEnabled(true);
     }
@@ -190,7 +190,7 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     private void AcceptFriendRequest() {
         Calendar date = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
         dateBefriended = currentDate.format(date.getTime());
 
         friendsRef.child(senderUserID).child(receiverUserID).child("date").setValue(dateBefriended)

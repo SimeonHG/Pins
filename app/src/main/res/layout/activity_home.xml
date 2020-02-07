@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/padding"
 
     tools:context=".HomeActivity">
 
@@ -28,6 +29,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:text="@string/profile"
+        android:layout_marginBottom="@dimen/margin"
         app:layout_constraintBottom_toTopOf="@+id/editProfileBtn"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -39,6 +41,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:text="@string/find_friends"
+        android:layout_marginBottom="@dimen/margin"
         app:layout_constraintBottom_toTopOf="@+id/homeProfileBtn"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -50,6 +53,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:text="@string/logout"
+        android:layout_marginBottom="@dimen/margin"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -58,8 +62,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/homePageLogoutBtn"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/margin"
         android:text="@string/edit_profile"
+
         app:layout_constraintBottom_toTopOf="@+id/settingsBtn"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -71,6 +76,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="@string/check_the_map"
+        android:layout_marginBottom="@dimen/margin"
         app:layout_constraintBottom_toTopOf="@+id/eventsBtn"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -82,6 +88,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="@string/events"
+        android:layout_marginBottom="@dimen/margin"
         app:layout_constraintBottom_toTopOf="@+id/findFriendsBtn"
         tools:layout_editor_absoluteX="16dp" />
 
@@ -89,8 +96,9 @@
         android:id="@+id/settingsBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/margin"
         android:text="@string/settings"
+
         app:layout_constraintBottom_toTopOf="@+id/homePageLogoutBtn"
         tools:layout_editor_absoluteX="160dp" />
 
@@ -99,6 +107,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/heatmap"
+        android:layout_marginBottom="@dimen/margin"
         app:layout_constraintBottom_toTopOf="@+id/checkMapBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

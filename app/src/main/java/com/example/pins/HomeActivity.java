@@ -1,5 +1,6 @@
 package com.example.pins;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,17 +12,24 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomeActivity extends AppCompatActivity {
 
     private Button logoutBtn;
     private Button openProfile, findFriends, editProfile, checkMap, events, settings, heatmap;
     private FirebaseAuth mAuth;
+    private DatabaseReference dbRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        dbRef = FirebaseDatabase.getInstance().getReference();
 
         logoutBtn = findViewById(R.id.homePageLogoutBtn);
         openProfile = findViewById(R.id.homeProfileBtn);
@@ -102,6 +110,20 @@ public class HomeActivity extends AppCompatActivity {
         if (currentUser == null){
             updateUI();
         }
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.child("Users").hasChild(mAuth.getCurrentUser().getUid())){
+                    Intent setUser = new Intent(HomeActivity.this, EditProfileActivity.class);
+                    startActivity(setUser);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void updateUI(){

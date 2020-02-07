@@ -109,11 +109,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 0, new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    //TODO update-ni lastKnownLoc vuv firebase?
+
 
                     final double latitude = location.getLatitude();
                     final double longitude = location.getLongitude();
-                    Toast.makeText(MapsActivity.this, "GPS provider", Toast.LENGTH_LONG).show();
+                    
                     currentLatLng = new LatLng(latitude, longitude);
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
@@ -213,7 +213,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     final double latitude = location.getLatitude();
                     final double longitude = location.getLongitude();
-                    Toast.makeText(MapsActivity.this, "GPS provider", Toast.LENGTH_LONG).show();
+
                     currentLatLng = new LatLng(latitude, longitude);
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);

@@ -16,8 +16,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +33,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference userRef;
+    private DatabaseReference dbRef;
     private FirebaseUser currentUser;
 
     private String currentUserID;
@@ -43,11 +47,30 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         currentUserID = mAuth.getCurrentUser().getUid();
         userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
+        dbRef = FirebaseDatabase.getInstance().getReference();
 
 
         username = findViewById(R.id.username);
         fullname = findViewById(R.id.fullName);
         gender = findViewById(R.id.gender);
+
+        dbRef.child("Users").child(currentUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    username.setText(dataSnapshot.child("display_name").getValue().toString());
+                    fullname.setText(dataSnapshot.child("full_name").getValue().toString());
+                    gender.setText(dataSnapshot.child("gender").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
         FinishBtn = findViewById(R.id.finishBtn);
 
         FinishBtn.setOnClickListener(new View.OnClickListener() {
@@ -59,47 +82,42 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void SaveAccountInfo() {
-        String uname = username.getText().toString();
-        String fname = fullname.getText().toString();
-        String gen = gender.getText().toString();
+        final String uname = username.getText().toString();
+        final String fname = fullname.getText().toString();
+        final String gen = gender.getText().toString();
+
+        dbRef.child("Users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean exists = false;
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    if(snapshot.child("display_name").getValue().equals(uname) && !snapshot.getKey().equals(currentUserID)) {
+                        exists = true;
+                    }
+                }
+
+                if(exists){
+                    Toast.makeText(EditProfileActivity.this,"Username taken, choose a different one", Toast.LENGTH_LONG).show();
+                } else if(TextUtils.isEmpty(uname)){
+                    Toast.makeText(EditProfileActivity.this,"Provide username", Toast.LENGTH_LONG).show();
+                } else {
 
 
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put("display_name", uname);
+                    childUpdates.put("full_name", fname);
+                    childUpdates.put("gender", gen);
 
+                    userRef.updateChildren(childUpdates);
 
+                }
 
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
-
-
-        if(TextUtils.isEmpty(uname)){
-            Toast.makeText(EditProfileActivity.this,"Provide username", Toast.LENGTH_LONG).show();
-        }
-
-        else {
-            UserProfileChangeRequest profileUpdate = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(uname)
-                    .build();
-
-            currentUser.updateProfile(profileUpdate)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Toast.makeText(EditProfileActivity.this,"Done", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(EditProfileActivity.this,task.getException().toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-
-            Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put("display_name", currentUser.getDisplayName());
-            childUpdates.put("full_name", fname);
-            childUpdates.put("gender", gen);
-
-            userRef.updateChildren(childUpdates);
-
-        }
+            }
+        });
     }
 }

@@ -123,13 +123,14 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Calendar date = Calendar.getInstance();
+                            SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
+                            String date_attended = currentDate.format(date.getTime());
 
-                            Date date_attended = date.getTime();
 
                             final String ownerID = dataSnapshot.child("ownerID").getValue().toString();
 
                             eventsRef.child(scanResult).child("guests").child(currentUserId).child("date")
-                                    .setValue(date_attended.toString());
+                                    .setValue(date_attended);
 
                             eventsRef.child(scanResult).child("guests").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override

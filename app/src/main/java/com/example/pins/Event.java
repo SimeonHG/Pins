@@ -37,7 +37,6 @@ public class Event {
         result.put("title", title);
         result.put("desc", desc);
         result.put("time_started", time_start);
-        result.put("start_time_as_string", time_start.toString());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         result.put("date_start", sdf.format(time_start.getTime()));
 
