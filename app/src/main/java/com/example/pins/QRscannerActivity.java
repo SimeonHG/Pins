@@ -114,9 +114,7 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
         eventsRef.child(scanResult).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
                 if(!dataSnapshot.child("guests").hasChild(currentUserId)){
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(QRscannerActivity.this);
                     builder.setTitle("scan result");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -125,41 +123,28 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
                             Calendar date = Calendar.getInstance();
                             SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
                             String date_attended = currentDate.format(date.getTime());
-
-
                             final String ownerID = dataSnapshot.child("ownerID").getValue().toString();
-
                             eventsRef.child(scanResult).child("guests").child(currentUserId).child("date")
                                     .setValue(date_attended);
-
                             eventsRef.child(scanResult).child("guests").addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    System.out.println("hello1");
                                     for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                                        System.out.println("hello2");
-                                        System.out.println("==========="+currentUserId+"//"+snapshot.getKey()+"//");
                                         if(!currentUserId.equals(snapshot.getKey())) {
                                             increaseScore(snapshot.getKey());
                                         }
-
-
                                     }
                                     if(!currentUserId.equals(ownerID)) {
                                         increaseScore(ownerID);
                                     }
                                 }
-
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
-
                                 }
                             });
-
                             Intent eventPage = new Intent(QRscannerActivity.this, EventProfileActivity.class);
                             eventPage.putExtra("visit_event_id", scanResult);
                             startActivity(eventPage);
-
                         }
                     });
                     builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -171,18 +156,15 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
                     builder.setMessage("Do you want to join " + dataSnapshot.child("title").getValue().toString() + "?");
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-
                 }else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(QRscannerActivity.this);
                     builder.setTitle("scan result");
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
                             Intent eventPage = new Intent(QRscannerActivity.this, EventProfileActivity.class);
                             eventPage.putExtra("visit_event_id", scanResult);
                             startActivity(eventPage);
-
                         }
                     });
                     builder.setMessage("You have already joined " + dataSnapshot.child("title").getValue().toString());

@@ -36,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -73,6 +74,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+    }
+
+    @Override
+    public  void onBackPressed(){
+        Toast.makeText(MapsActivity.this, "finished", Toast.LENGTH_LONG).show();
+        finish();
     }
 
 
@@ -113,11 +120,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     final double latitude = location.getLatitude();
                     final double longitude = location.getLongitude();
-                    
+
                     currentLatLng = new LatLng(latitude, longitude);
+                    Date date = Calendar.getInstance().getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String lastSeenOn = sdf.format(date);
+                    locationsRef.child(currentUserID).child("last_seen_on").setValue(lastSeenOn);
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
                     locationsRef.child(currentUserID).child("last_location").child("longitude").setValue(longitude);
+
                     currentLoc = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
 
                     Calendar rightNow = Calendar.getInstance();
@@ -125,9 +137,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(hours == 12 || hours == 18){
                         locationsRef.child(currentUserID).child(String.valueOf(hours)).child("latitude").setValue(latitude);
                         locationsRef.child(currentUserID).child(String.valueOf(hours)).child("longitude").setValue(longitude);
+
                     }
 
-                    locationsRef.addValueEventListener(new ValueEventListener() {
+                    locationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             mMap.clear();
@@ -146,28 +159,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 if(user.hasChild("last_location")) {
                                     final double user_latitude = (double) user.child("last_location").child("latitude").getValue();
                                     final double user_longitude = (double) user.child("last_location").child("longitude").getValue();
-                                    System.out.println("user: " + user.getKey());
                                     if (!currentUserID.equals(user.getKey())
                                             && isInRadius(new LatLng(user_latitude, user_longitude), currentLatLng)
-                                            && (user.hasChild("visible") && (boolean)user.child("visible").getValue())
-                                    )
-                                    {
-                                        dbRef.addValueEventListener(new ValueEventListener() {
+                                            && (user.hasChild("visible") && (boolean)user.child("visible").getValue())) {
+                                        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 if(dataSnapshot.child("Friendlists").child(currentUserID).hasChild(user.getKey())
                                                         && !dataSnapshot.child("Blocked").child(currentUserID).hasChild(user.getKey())
                                                 )
                                                 {
-                                                    mMap.addMarker(new MarkerOptions()
+                                                    if(dataSnapshot.child("Locations").child(user.getKey()).hasChild("last_seen_on")){
+                                                        mMap.addMarker(new MarkerOptions()
                                                             .position(new LatLng(user_latitude, user_longitude))
-                                                            .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+                                                                .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+                                                                .snippet("Last seen on: " + dataSnapshot.child("Locations").child(user.getKey()).child("last_seen_on").getValue().toString())
 
-                                                    );
+                                                        );
+                                                    } else {
+                                                        mMap.addMarker(new MarkerOptions()
+                                                                .position(new LatLng(user_latitude, user_longitude))
+                                                                .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+                                                        );
+                                                    }
+
                                                 }
                                             }
 
-                                            @Override
+                                           @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                             }
@@ -215,6 +234,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     final double longitude = location.getLongitude();
 
                     currentLatLng = new LatLng(latitude, longitude);
+                    Date date = Calendar.getInstance().getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String lastSeenOn = sdf.format(date);
+                    locationsRef.child(currentUserID).child("last_seen_on").setValue(lastSeenOn);
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
                     locationsRef.child(currentUserID).child("last_location").child("longitude").setValue(longitude);
@@ -227,7 +250,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         locationsRef.child(currentUserID).child(String.valueOf(hours)).child("longitude").setValue(longitude);
                     }
 
-                    locationsRef.addValueEventListener(new ValueEventListener() {
+                    locationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             mMap.clear();
@@ -252,18 +275,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             && (user.hasChild("visible") && (boolean)user.child("visible").getValue())
                                             )
                                     {
-                                        dbRef.addValueEventListener(new ValueEventListener() {
+                                        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 if(dataSnapshot.child("Friendlists").child(currentUserID).hasChild(user.getKey())
                                                 && !dataSnapshot.child("Blocked").child(currentUserID).hasChild(user.getKey())
                                                 )
                                                 {
-                                                    mMap.addMarker(new MarkerOptions()
-                                                            .position(new LatLng(user_latitude, user_longitude))
-                                                            .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+                                                    if(dataSnapshot.child("Locations").child(user.getKey()).hasChild("last_seen_on")){
+                                                        mMap.addMarker(new MarkerOptions()
+                                                                .position(new LatLng(user_latitude, user_longitude))
+                                                                .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+                                                                .snippet("Last seen on: " + dataSnapshot.child("Locations").child(user.getKey()).child("last_seen_on").getValue().toString())
 
-                                                    );
+                                                        );
+                                                    } else {
+                                                        mMap.addMarker(new MarkerOptions()
+                                                                .position(new LatLng(user_latitude, user_longitude))
+                                                                .title(dataSnapshot.child("Users").child(user.getKey()).child("full_name").getValue().toString())
+                                                        );
+                                                    }
                                                 }
                                             }
 

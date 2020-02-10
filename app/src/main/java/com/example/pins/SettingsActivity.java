@@ -69,7 +69,6 @@ public class SettingsActivity extends AppCompatActivity {
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //System.out.println(dataSnapshot.child("Locations").child(currentUserID).child("visible").getValue().toString());
                 if(dataSnapshot.child("Locations").child(currentUserID).hasChild("visible")) {
                     boolean visibility = (boolean) dataSnapshot.child("Locations").child(currentUserID).child("visible").getValue();
                     if (visibility) {
@@ -84,17 +83,13 @@ public class SettingsActivity extends AppCompatActivity {
                     seekBar.setProgress(((int) rad)/250);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
 
     public void manipulateSeekbar(){
-
-
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progress_value;
             @Override
@@ -107,12 +102,9 @@ public class SettingsActivity extends AppCompatActivity {
                     radiusText.setText(progress_value*250 + "m");
                 }
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                

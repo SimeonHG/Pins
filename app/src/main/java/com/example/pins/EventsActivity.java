@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -77,7 +78,7 @@ public class EventsActivity extends AppCompatActivity {
     private void SearchEvents(String input) {
         java.text.SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-        Calendar date = Calendar.getInstance();
+        final Calendar date = Calendar.getInstance();
 
 
         Date newDate = new Date(date.getTime().getTime() - (2 * 24 * 60 * 60 * 1000));
@@ -92,7 +93,15 @@ public class EventsActivity extends AppCompatActivity {
                 ) {
             @Override
             protected void populateViewHolder(EventsActivity.FindEventsViewHolder viewHolder, Event event, final int position) {
-                if(event.time_start.after(new Date( Calendar.getInstance().getTime().getTime()- (2 * 24 * 60 * 60 * 1000)))) {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date start = Calendar.getInstance().getTime();
+                try {
+                    start = sdf.parse(event.date_start);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if(start.after(new Date( Calendar.getInstance().getTime().getTime()- (2 * 24 * 60 * 60 * 1000)))) {
                     viewHolder.setTitle(event.title);
                     viewHolder.setDesc(event.desc);
                     viewHolder.setStartTime(String.valueOf(event.time_start));

@@ -45,6 +45,7 @@ public class EventPickDateTimeActivity extends AppCompatActivity {
                     start_date.set(year,month,day, hour, minute);
                     makeAnEvent.putExtra("start_time", start_date);
                     startActivity(makeAnEvent);
+
                 }
 
             }

@@ -46,6 +46,11 @@ public class EventProfileActivity extends AppCompatActivity {
     private ShareDialog shareDialog;
 
     @Override
+    public void onBackPressed(){
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_profile);
@@ -83,7 +88,7 @@ public class EventProfileActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String db_title = dataSnapshot.child("title").getValue().toString();
                 String db_desc = dataSnapshot.child("desc").getValue().toString();
-                String db_start_time = (dataSnapshot.child("start_time_as_string").getValue().toString());
+                String db_start_time = (dataSnapshot.child("date_start").getValue().toString());
                 if(mAuth.getCurrentUser().getUid().equals( dataSnapshot.child("ownerID").getValue().toString())){
                     MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
@@ -112,7 +117,7 @@ public class EventProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final String text = " is attending " + title.getText() + " with ";
 
-                dbRef.addValueEventListener(new ValueEventListener() {
+                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String userName = dataSnapshot.child("Users").child(currentUserID).child("full_name").getValue().toString();

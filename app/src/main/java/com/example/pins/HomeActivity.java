@@ -118,7 +118,6 @@ public class HomeActivity extends AppCompatActivity {
                     startActivity(setUser);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
