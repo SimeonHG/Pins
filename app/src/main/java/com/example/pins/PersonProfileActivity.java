@@ -63,7 +63,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         friendsRef = FirebaseDatabase.getInstance().getReference().child("Friendlists");
         blockedRef = FirebaseDatabase.getInstance().getReference().child("Blocked");
 
-        InitFields(); // TODO: every activity should be refactored like <- this
+        initFields();
         receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
         userRef.child(receiverUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -77,7 +77,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                     fullName.setText(userFullName);
                     gender.setText(userGender);
 
-                    MaintainUI();
+                    maintainUI();
                 }
             }
 
@@ -113,19 +113,19 @@ public class PersonProfileActivity extends AppCompatActivity {
                             declineBtn.setVisibility(View.INVISIBLE);
                             declineBtn.setEnabled(false);
 
-                            SendFriendRequest();
+                            sendFriendRequest();
                             break;
                         case REQUEST_SENT:
                             declineBtn.setVisibility(View.INVISIBLE);
                             declineBtn.setEnabled(false);
 
-                            CancelFriendRequest();
+                            cancelFriendRequest();
                             break;
                         case REQUEST_RECEIVED:
-                            AcceptFriendRequest();
+                            acceptFriendRequest();
                             break;
                         case FRIENDS:
-                            Unfriend();
+                            unfriend();
                             break;
                     }
                 }
@@ -133,20 +133,20 @@ public class PersonProfileActivity extends AppCompatActivity {
             blockBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Block();
+                    block();
                 }
             });
             unblockBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Unblock();
+                    unblock();
                 }
             });
 
 
         }
     }
-    private void Block(){
+    private void block(){
         Calendar date = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
         dateBlocked = currentDate.format(date.getTime());
@@ -154,14 +154,14 @@ public class PersonProfileActivity extends AppCompatActivity {
         unblockBtn.setVisibility(View.VISIBLE);
         unblockBtn.setEnabled(true);
     }
-    private void Unblock(){
+    private void unblock(){
         blockedRef.child(senderUserID).child(receiverUserID).removeValue();
         unblockBtn.setVisibility(View.INVISIBLE);
         unblockBtn.setEnabled(false);
     }
 
 
-    private void Unfriend() {
+    private void unfriend() {
         friendsRef.child(senderUserID).child(receiverUserID)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -174,7 +174,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
-                                                sendBtn.setEnabled(true); //true?
+                                                sendBtn.setEnabled(true); 
                                                 friendshipStatus = FriendshipStatus.NOT_FRIENDS;
                                                 sendBtn.setText("Send Friend Request");
 
@@ -188,7 +188,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private void AcceptFriendRequest() {
+    private void acceptFriendRequest() {
         Calendar date = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
         dateBefriended = currentDate.format(date.getTime());
@@ -237,7 +237,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private void CancelFriendRequest() {
+    private void cancelFriendRequest() {
         friendRequestRef.child(senderUserID).child(receiverUserID)
                 .removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -264,7 +264,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void MaintainUI() {
+    private void maintainUI() {
         friendRequestRef.child(senderUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -288,7 +288,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                         declineBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                CancelFriendRequest();
+                                cancelFriendRequest();
                             }
                         });
                     }
@@ -342,7 +342,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void SendFriendRequest() {
+    private void sendFriendRequest() {
         friendRequestRef.child(senderUserID).child(receiverUserID)
                 .child("request_type").setValue("sent").addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -367,7 +367,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void InitFields() {
+    private void initFields() {
         displayName = findViewById(R.id.personDisplayName);
         fullName = findViewById(R.id.personFullname);
         gender = findViewById(R.id.personGender);

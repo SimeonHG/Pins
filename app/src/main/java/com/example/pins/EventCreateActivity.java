@@ -66,7 +66,7 @@ public class EventCreateActivity extends AppCompatActivity {
                 eventsRef.child(String.valueOf(id+1)).child("title").setValue(title.getText().toString());
                 eventsRef.child(String.valueOf(id+1)).child("desc").setValue(desc.getText().toString());
                 eventsRef.child(String.valueOf(id+1)).child("time_created").setValue(Calendar.getInstance().getTime());
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 String formattedStartTime = sdf.format(start_date.getTime());
                 eventsRef.child(String.valueOf(id+1)).child("date_start").setValue(formattedStartTime);
                 eventsRef.child(String.valueOf(id+1)).child("time_start").setValue(start_date.getTime());
