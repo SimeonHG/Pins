@@ -174,7 +174,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
-                                                sendBtn.setEnabled(true); 
+                                                sendBtn.setEnabled(true);
                                                 friendshipStatus = FriendshipStatus.NOT_FRIENDS;
                                                 sendBtn.setText("Send Friend Request");
 
@@ -216,7 +216,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                                                                                 @Override
                                                                                 public void onComplete(@NonNull Task<Void> task) {
                                                                                     if(task.isSuccessful()){
-                                                                                        sendBtn.setEnabled(true); //true?
+                                                                                        sendBtn.setEnabled(true);
                                                                                         friendshipStatus = FriendshipStatus.FRIENDS;
                                                                                         sendBtn.setText("Unfriend");
 

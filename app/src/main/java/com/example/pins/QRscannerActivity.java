@@ -68,44 +68,8 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
         return (ContextCompat.checkSelfPermission(QRscannerActivity.this, CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
 
-    public void onRequestPermissionResult(int requestCode, String permission[], int grantResults[]){
-        switch (requestCode){
-            case REQUEST_CAMERA :
-                if(grantResults.length > 0){
-                    boolean cameraAccepted =  grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if(cameraAccepted){
-                        Toast.makeText(QRscannerActivity.this, "Permission granted --", Toast.LENGTH_LONG).show();
-                    }else {
-
-                        Toast.makeText(QRscannerActivity.this, "Permission not granted --", Toast.LENGTH_LONG).show();
-                        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                            if(shouldShowRequestPermissionRationale(CAMERA)){
-                                displayAlertMessage("Allow access please",
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                requestPermissions(new String[]{CAMERA}, REQUEST_CAMERA);
-                                            }
-                                        });
-                                return;
-                            }
-                        }
-                    }
 
 
-                }
-                break;
-        }
-    }
-
-    private void displayAlertMessage(String message, DialogInterface.OnClickListener listener) {
-        new AlertDialog.Builder(QRscannerActivity.this)
-                .setMessage(message)
-                .setPositiveButton("OK", listener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
 
     @Override
     public void handleResult(Result rawResult) {
@@ -179,25 +143,7 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
             }
         });
 
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("scan result");
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                scannerView.resumeCameraPreview(QRscannerActivity.this);
-//
-//            }
-//        });
-//        builder.setNeutralButton("Visit", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(scanResult));
-//                startActivity(intent);
-//            }
-//        });
-//        builder.setMessage(scanResult);
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.show();
+
     }
 
     private void increaseScore(final String user) {

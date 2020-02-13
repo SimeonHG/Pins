@@ -110,26 +110,29 @@ public class HomeActivity extends AppCompatActivity {
         if (currentUser == null){
             updateUI();
         }
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.child("Users").hasChild(mAuth.getCurrentUser().getUid())){
-                    Intent setUser = new Intent(HomeActivity.this, EditProfileActivity.class);
-                    startActivity(setUser);
+        else {
+            dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.child("Users").hasChild(mAuth.getCurrentUser().getUid())) {
+                        Intent setUser = new Intent(HomeActivity.this, EditProfileActivity.class);
+                        startActivity(setUser);
+                    }
                 }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 
     private void updateUI(){
         Toast.makeText(HomeActivity.this, "You are logged out.",  Toast.LENGTH_SHORT).show();
 
-        Intent HomePage = new Intent(HomeActivity.this, MainActivity.class);
-        startActivity(HomePage);
+        Intent login = new Intent(HomeActivity.this, MainActivity.class);
+        startActivity(login);
         finish();
     }
 }

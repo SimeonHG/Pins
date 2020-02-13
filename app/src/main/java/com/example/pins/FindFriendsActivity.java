@@ -51,12 +51,12 @@ public class FindFriendsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String input = searchInputText.getText().toString();
-                SearchPeople(input);
+                searchPeople(input);
             }
         });
     }
 
-    private void SearchPeople(String input) {
+    private void searchPeople(String input) {
         Query searchPeopleQuery = allUsersRef.orderByChild("full_name").startAt(input).endAt(input + "\uf8ff");
 
         FirebaseRecyclerAdapter<User, FindFriendsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, FindFriendsViewHolder>
