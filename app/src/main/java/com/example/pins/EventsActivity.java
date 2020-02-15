@@ -76,15 +76,6 @@ public class EventsActivity extends AppCompatActivity {
     }
 
     private void SearchEvents(String input) {
-        java.text.SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        final Calendar date = Calendar.getInstance();
-
-
-        Date newDate = new Date(date.getTime().getTime() - (2 * 24 * 60 * 60 * 1000));
-        String formattedNewDate = sdf.format(newDate.getTime());
-
-        Query test = eventsRef.orderByChild("date_start").startAt(formattedNewDate).endAt(sdf.format(date.getTime()));
         Query searchEventsQuery = (eventsRef.orderByChild("title").startAt(input).endAt(input + "\uf8ff"));
 
         FirebaseRecyclerAdapter<Event, EventsActivity.FindEventsViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Event, EventsActivity.FindEventsViewHolder>
@@ -93,24 +84,24 @@ public class EventsActivity extends AppCompatActivity {
                 ) {
             @Override
             protected void populateViewHolder(EventsActivity.FindEventsViewHolder viewHolder, Event event, final int position) {
-
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date start = Calendar.getInstance().getTime();
                 try {
                     start = sdf.parse(event.date_start);
                 } catch (ParseException e) {
                     e.printStackTrace();
+                } catch (NullPointerException e){
+                    e.printStackTrace();
                 }
+                Toast.makeText(EventsActivity.this, event.date_start, Toast.LENGTH_LONG).show();
                 if(start.after(new Date( Calendar.getInstance().getTime().getTime()- (2 * 24 * 60 * 60 * 1000)))) {
                     viewHolder.setTitle(event.title);
                     viewHolder.setDesc(event.desc);
-                    viewHolder.setStartTime(String.valueOf(event.time_start));
-
+                    viewHolder.setStartTime(event.date_start);
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             String visit_event_id = getRef(position).getKey();
-
                             Intent eventIntent = new Intent(EventsActivity.this, EventProfileActivity.class);
                             eventIntent.putExtra("visit_event_id", visit_event_id);
                             startActivity(eventIntent);

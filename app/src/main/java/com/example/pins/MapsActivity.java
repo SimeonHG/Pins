@@ -241,7 +241,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     locationsRef.child(currentUserID).child("last_location").child("latitude").setValue(latitude);
                     locationsRef.child(currentUserID).child("last_location").child("longitude").setValue(longitude);
-                    currentLoc = mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+
 
                     Calendar rightNow = Calendar.getInstance();
                     int hours = rightNow.get(Calendar.HOUR_OF_DAY);

@@ -70,7 +70,8 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child("Locations").child(currentUserID).hasChild("visible")) {
-                    boolean visibility = (boolean) dataSnapshot.child("Locations").child(currentUserID).child("visible").getValue();
+                    boolean visibility = (boolean) dataSnapshot.child("Locations").child(currentUserID)
+                            .child("visible").getValue();
                     if (visibility) {
                         visibilitySwitch.setChecked(true);
                         visibilityText.setText("Visible");
@@ -79,7 +80,8 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 }
                 if(dataSnapshot.child("Radiuses").hasChild(currentUserID)){
-                    long rad = (long)dataSnapshot.child("Radiuses").child(currentUserID).child("radius").getValue();
+                    long rad = (long)dataSnapshot.child("Radiuses").child(currentUserID)
+                            .child("radius").getValue();
                     seekBar.setProgress(((int) rad)/250);
                 }
             }

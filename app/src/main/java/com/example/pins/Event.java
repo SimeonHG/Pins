@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Event {
-
     public Date dateCreated;
     public Date time_start;
     public String title;
@@ -17,9 +16,7 @@ public class Event {
     public String date_start;
 
     public Event() {
-
     }
-
 
     public Event(Date dateCreated, Date dateStarted, String title, String description) {
         this.dateCreated = dateCreated;
@@ -28,18 +25,14 @@ public class Event {
         this.desc = description;
     }
 
-
-
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-
         result.put("title", title);
         result.put("desc", desc);
         result.put("time_started", time_start);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         result.put("date_start", sdf.format(time_start.getTime()));
-
         return result;
     }
 }
