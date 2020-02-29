@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 public class HomeActivity extends AppCompatActivity {
 
     private Button logoutBtn;
-    private Button openProfile, findFriends, editProfile, checkMap, events, settings, heatmap;
+    private Button openProfile, findFriends, editProfile, checkMap, events, settings, heatmap, friendlist;
     private FirebaseAuth mAuth;
     private DatabaseReference dbRef;
 
@@ -39,6 +39,7 @@ public class HomeActivity extends AppCompatActivity {
         events = findViewById(R.id.eventsBtn);
         settings = findViewById(R.id.settingsBtn);
         heatmap = findViewById(R.id.checkHeatmapBtn);
+        friendlist = findViewById(R.id.friendlistBtn);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -98,6 +99,14 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent settingsPage = new Intent(HomeActivity.this, HeatmapActivity.class);
+                startActivity(settingsPage);
+            }
+        });
+
+        friendlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent settingsPage = new Intent(HomeActivity.this, FriendlistActivity.class);
                 startActivity(settingsPage);
             }
         });

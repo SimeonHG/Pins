@@ -10,6 +10,7 @@
         android:id="@+id/viewHolderLayout"
 
 
+
         >
         <TextView
             android:id="@+id/all_events_title"

@@ -107,6 +107,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     childUpdates.put("display_name", uname);
                     childUpdates.put("full_name", fname);
                     childUpdates.put("gender", gen);
+                    childUpdates.put("uid", currentUserID);
 
                     userRef.updateChildren(childUpdates);
 
