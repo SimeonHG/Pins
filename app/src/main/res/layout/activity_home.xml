@@ -114,9 +114,10 @@
 
     <Button
         android:id="@+id/friendlistBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Friendlist"
+        android:layout_marginBottom="@dimen/margin"
         app:layout_constraintBottom_toTopOf="@+id/checkHeatmapBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
