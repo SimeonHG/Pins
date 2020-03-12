@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,6 +26,8 @@ public class PersonProfileActivity extends AppCompatActivity {
 
 
     private TextView displayName, fullName, gender;
+    private ImageView profilePic;
+
     private DatabaseReference userRef;
     private DatabaseReference friendRequestRef;
     private DatabaseReference friendsRef;
@@ -72,6 +76,12 @@ public class PersonProfileActivity extends AppCompatActivity {
                     String userName = dataSnapshot.child("display_name").getValue().toString();
                     String userFullName = dataSnapshot.child("full_name").getValue().toString();
                     String userGender = dataSnapshot.child("gender").getValue().toString();
+                    Picasso.get().load(R.drawable.genericpic);
+
+                    if(dataSnapshot.hasChild("profilePic")){
+                        String image = dataSnapshot.child("profilePic").getValue().toString();
+                        Picasso.get().load(image).placeholder(R.drawable.genericpic).into(profilePic);
+                    }
 
                     displayName.setText("@" + userName);
                     fullName.setText(userFullName);
@@ -371,6 +381,8 @@ public class PersonProfileActivity extends AppCompatActivity {
         displayName = findViewById(R.id.personDisplayName);
         fullName = findViewById(R.id.personFullname);
         gender = findViewById(R.id.personGender);
+
+        profilePic = findViewById(R.id.personProfilePic);
 
         sendBtn = findViewById(R.id.personSendRequestBtn);
 

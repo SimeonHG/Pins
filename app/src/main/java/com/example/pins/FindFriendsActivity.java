@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.android.gms.actions.SearchIntents;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
 
 public class FindFriendsActivity extends AppCompatActivity {
 
@@ -28,7 +30,7 @@ public class FindFriendsActivity extends AppCompatActivity {
 
     private RecyclerView friendsList;
 
-    private DatabaseReference  allUsersRef;
+    public DatabaseReference  allUsersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class FindFriendsActivity extends AppCompatActivity {
         private TextView fullName;
         private TextView displayName;
         private TextView gender;
+        private ImageView profilePic;
 
         public FindFriendsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +97,7 @@ public class FindFriendsActivity extends AppCompatActivity {
             fullName = itemView.findViewById(R.id.all_users_fullname);
             displayName = itemView.findViewById(R.id.all_users_display);
             gender = itemView.findViewById(R.id.all_users_gender);
+            profilePic = itemView.findViewById(R.id.all_users_pic);
         }
 
 
@@ -101,6 +105,8 @@ public class FindFriendsActivity extends AppCompatActivity {
             fullName.setText(user.full_name);
             displayName.setText(user.display_name);
             gender.setText(user.gender);
+            Picasso.get().load(user.profilePic).placeholder(R.drawable.genericpic).into(profilePic);
+
         }
     }
 }

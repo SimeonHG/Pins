@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,6 +138,8 @@ public class FriendlistActivity extends AppCompatActivity {
         private TextView fullName;
         private TextView displayName;
         private TextView gender;
+        private ImageView profilePic;
+
 
         public FriendsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,9 +152,11 @@ public class FriendlistActivity extends AppCompatActivity {
             fullName = itemView.findViewById(R.id.all_users_fullname);
             displayName = itemView.findViewById(R.id.all_users_display);
             gender = itemView.findViewById(R.id.all_users_gender);
+            profilePic = itemView.findViewById(R.id.all_users_pic);
             fullName.setText(user.full_name);
             displayName.setText(user.display_name);
             gender.setText(user.gender);
+            Picasso.get().load(user.profilePic).placeholder(R.drawable.genericpic).into(profilePic);
         }
 
         void vanish(){

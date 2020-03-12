@@ -11,6 +11,7 @@ public class User {
     public String display_name;
     public String full_name;
     public String gender;
+    public String profilePic;
     public Locale last_location;
 
 

@@ -11,11 +11,11 @@
         android:id="@+id/personDisplayName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="32dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/personProfilePic" />
 
     <TextView
         android:id="@+id/personFullname"
@@ -70,4 +70,14 @@
         app:layout_constraintBottom_toTopOf="@+id/personSendRequestBtn"
         app:layout_constraintEnd_toEndOf="parent"
         tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/personProfilePic"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/genericpic" />
 </androidx.constraintlayout.widget.ConstraintLayout>
