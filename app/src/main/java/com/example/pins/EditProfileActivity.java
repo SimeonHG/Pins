@@ -37,6 +37,7 @@ import java.util.Map;
 public class EditProfileActivity extends AppCompatActivity {
 
     private EditText username, fullname, gender;
+    private String downloadUrl;
     private Button FinishBtn;
     private Button uploadPhotoBtn;
     private ImageView profileImage;
@@ -150,19 +151,21 @@ public class EditProfileActivity extends AppCompatActivity {
                             result.addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    final String downloadUrl = uri.toString();
-                                    userRef.child("profilePic").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
-//                                                Intent selfIntent = new Intent(EditProfileActivity.this, EditProfileActivity.class);
-//                                                startActivity(selfIntent);
-
-                                            } else {
-                                                Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
+                                    downloadUrl = uri.toString();
+                                    //String image = dataSnapshot.child("profilePic").getValue().toString();
+                                    Picasso.get().load(downloadUrl).placeholder(R.drawable.genericpic).into(profileImage);
+//                                    userRef.child("profilePic").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                        @Override
+//                                        public void onComplete(@NonNull Task<Void> task) {
+//                                            if(task.isSuccessful()){
+////                                                Intent selfIntent = new Intent(EditProfileActivity.this, EditProfileActivity.class);
+////                                                startActivity(selfIntent);
+//
+//                                            } else {
+//                                                Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+//                                            }
+//                                        }
+//                                    });
                                 }
                             });
 
@@ -217,6 +220,9 @@ public class EditProfileActivity extends AppCompatActivity {
                     childUpdates.put("full_name", fname);
                     childUpdates.put("gender", gen);
                     childUpdates.put("uid", currentUserID);
+                    childUpdates.put("profilePic", downloadUrl);
+
+
 
                     userRef.updateChildren(childUpdates);
 
