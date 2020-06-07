@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.actions.SearchIntents;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -32,10 +34,19 @@ public class FindFriendsActivity extends AppCompatActivity {
 
     public DatabaseReference  allUsersRef;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
+    private String currentUserID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_friends);
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        currentUserID = mAuth.getCurrentUser().getUid();
 
 
         friendsList = findViewById(R.id.recycler);
@@ -67,18 +78,20 @@ public class FindFriendsActivity extends AppCompatActivity {
                 ) {
             @Override
             protected void populateViewHolder(FindFriendsViewHolder viewHolder, User user, final int position) {
-                viewHolder.displayUser(user);
+                //if(currentUserID.equals( user.uid)) {
+                    viewHolder.displayUser(user);
 
-                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String visit_user_id = getRef(position).getKey();
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String visit_user_id = getRef(position).getKey();
 
-                        Intent profileIntent = new Intent(FindFriendsActivity.this, PersonProfileActivity.class);
-                        profileIntent.putExtra("visit_user_id", visit_user_id);
-                        startActivity(profileIntent);
-                    }
-                });
+                            Intent profileIntent = new Intent(FindFriendsActivity.this, PersonProfileActivity.class);
+                            profileIntent.putExtra("visit_user_id", visit_user_id);
+                            startActivity(profileIntent);
+                        }
+                    });
+               // }
             }
         };
         friendsList.setAdapter(firebaseRecyclerAdapter);
