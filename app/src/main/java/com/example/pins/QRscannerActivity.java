@@ -52,7 +52,7 @@ public class QRscannerActivity extends AppCompatActivity implements ZXingScanner
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(CheckPermission()){
-                Toast.makeText(QRscannerActivity.this, "Permission granted", Toast.LENGTH_LONG).show();
+            //    Toast.makeText(QRscannerActivity.this, "Permission granted", Toast.LENGTH_LONG).show();
             }
             else {
                 RequestPermission();

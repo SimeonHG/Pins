@@ -145,7 +145,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(EditProfileActivity.this, "Picture uploaded", Toast.LENGTH_LONG).show();
+            //                Toast.makeText(EditProfileActivity.this, "Picture uploaded", Toast.LENGTH_LONG).show();
                             Task<Uri> result = task.getResult().getMetadata().getReference().getDownloadUrl();
                             final String picUrl = task.getResult().getUploadSessionUri().toString();
                             result.addOnSuccessListener(new OnSuccessListener<Uri>() {

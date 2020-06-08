@@ -78,7 +78,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public  void onBackPressed(){
-        Toast.makeText(MapsActivity.this, "finished", Toast.LENGTH_LONG).show();
+     //   Toast.makeText(MapsActivity.this, "finished", Toast.LENGTH_LONG).show();
         finish();
     }
 

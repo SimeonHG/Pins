@@ -93,7 +93,7 @@ public class EventsActivity extends AppCompatActivity {
                 } catch (NullPointerException e){
                     e.printStackTrace();
                 }
-                Toast.makeText(EventsActivity.this, event.date_start, Toast.LENGTH_LONG).show();
+       //         Toast.makeText(EventsActivity.this, event.date_start, Toast.LENGTH_LONG).show();
                 if(start.after(new Date( Calendar.getInstance().getTime().getTime()- (2 * 24 * 60 * 60 * 1000)))) {
                     viewHolder.setTitle(event.title);
                     viewHolder.setDesc(event.desc);

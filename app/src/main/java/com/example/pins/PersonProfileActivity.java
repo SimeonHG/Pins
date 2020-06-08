@@ -25,13 +25,14 @@ import java.util.Calendar;
 public class PersonProfileActivity extends AppCompatActivity {
 
 
-    private TextView displayName, fullName, gender;
+    private TextView displayName, fullName, gender, score;
     private ImageView profilePic;
 
     private DatabaseReference userRef;
     private DatabaseReference friendRequestRef;
     private DatabaseReference friendsRef;
     private DatabaseReference blockedRef;
+    private DatabaseReference scoresRef;
 
     private FirebaseAuth mAuth;
     private String senderUserID;
@@ -66,8 +67,13 @@ public class PersonProfileActivity extends AppCompatActivity {
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("Friend_Requests");
         friendsRef = FirebaseDatabase.getInstance().getReference().child("Friendlists");
         blockedRef = FirebaseDatabase.getInstance().getReference().child("Blocked");
+        scoresRef = FirebaseDatabase.getInstance().getReference().child("Scores");
 
         initFields();
+        setScore();
+
+
+
         receiverUserID = getIntent().getExtras().get("visit_user_id").toString();
         userRef.child(receiverUserID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -156,6 +162,26 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         }
     }
+
+    private void setScore() {
+        scoresRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(senderUserID).exists() && dataSnapshot.child(senderUserID).hasChild(receiverUserID)){
+                    score.setText("Score = " + dataSnapshot.child(senderUserID).child(receiverUserID).getValue().toString());
+                }
+                else {
+                    score.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void block(){
         Calendar date = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -381,6 +407,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         displayName = findViewById(R.id.personDisplayName);
         fullName = findViewById(R.id.personFullname);
         gender = findViewById(R.id.personGender);
+        score = findViewById(R.id.score);
 
         profilePic = findViewById(R.id.personProfilePic);
 
