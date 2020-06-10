@@ -52,8 +52,9 @@ public class FriendlistActivity extends AppCompatActivity {
         friendlistRef = FirebaseDatabase.getInstance().getReference().child("Friendlists").child(currentUserID);
 
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-
-        displayFriends();
+        if(friendlistRef!= null) {
+            displayFriends();
+        }
 //        friends = new ArrayList<>();
 //
 //        friendlistRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -75,11 +76,6 @@ public class FriendlistActivity extends AppCompatActivity {
 //        for(String friend : friends){
 //                usersRef.child(friend).addListenerForSingleValueEvent(new ValueEventListener() {
 //                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        usernames.add(dataSnapshot.child("display_name").getValue().toString());
-//                        fullnames.add(dataSnapshot.child("full_name").getValue().toString());
-//                    }
-//
 //                    @Override
 //                    public void onCancelled(@NonNull DatabaseError databaseError) {
 //

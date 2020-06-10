@@ -78,7 +78,6 @@ public class FindFriendsActivity extends AppCompatActivity {
                 ) {
             @Override
             protected void populateViewHolder(FindFriendsViewHolder viewHolder, User user, final int position) {
-                //if(currentUserID.equals( user.uid)) {
                     viewHolder.displayUser(user);
 
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +90,6 @@ public class FindFriendsActivity extends AppCompatActivity {
                             startActivity(profileIntent);
                         }
                     });
-               // }
             }
         };
         friendsList.setAdapter(firebaseRecyclerAdapter);

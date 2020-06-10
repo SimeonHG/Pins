@@ -18,7 +18,6 @@ import com.facebook.share.Share;
 import com.facebook.share.model.ShareHashtag;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,13 +30,13 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
-import java.util.Date;
+
 
 public class EventProfileActivity extends AppCompatActivity {
 
     private TextView title, desc, time_start;
     private String eventID, currentUserID;
-    private DatabaseReference eventsRef, usersRef, locationsRef, dbRef;
+    private DatabaseReference eventsRef, dbRef;
     private FirebaseAuth mAuth;
     private ImageView QRcode;
 
@@ -76,10 +75,10 @@ public class EventProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
         currentUserID = mAuth.getCurrentUser().getUid();
 
-        locationsRef = FirebaseDatabase.getInstance().getReference().child("Locations");
+
         dbRef  = FirebaseDatabase.getInstance().getReference();
 
         eventsRef = FirebaseDatabase.getInstance().getReference().child("Events");
@@ -148,4 +147,3 @@ public class EventProfileActivity extends AppCompatActivity {
         });
     }
 }
-//TODO: kak se pravi attending post; koi oshte attend-va; possibly da ne e link? ;

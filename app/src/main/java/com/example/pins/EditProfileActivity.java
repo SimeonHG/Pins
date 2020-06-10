@@ -145,7 +145,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){
-            //                Toast.makeText(EditProfileActivity.this, "Picture uploaded", Toast.LENGTH_LONG).show();
                             Task<Uri> result = task.getResult().getMetadata().getReference().getDownloadUrl();
                             final String picUrl = task.getResult().getUploadSessionUri().toString();
                             result.addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -154,34 +153,12 @@ public class EditProfileActivity extends AppCompatActivity {
                                     downloadUrl = uri.toString();
                                     //String image = dataSnapshot.child("profilePic").getValue().toString();
                                     Picasso.get().load(downloadUrl).placeholder(R.drawable.genericpic).into(profileImage);
-//                                    userRef.child("profilePic").setValue(downloadUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//                                            if(task.isSuccessful()){
-////                                                Intent selfIntent = new Intent(EditProfileActivity.this, EditProfileActivity.class);
-////                                                startActivity(selfIntent);
-//
-//                                            } else {
-//                                                Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-//                                            }
-//                                        }
-//                                    });
+
                                 }
                             });
 
 
 
-//                            userRef.child("profilePic").setValue(picUrl).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//                                    if(task.isSuccessful()){
-//                                        Toast.makeText(EditProfileActivity.this, "Picture saved in FB database", Toast.LENGTH_LONG).show();
-//                                    }
-//                                    else {
-//                                        Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-//                                    }
-//                                }
-//                            });
                         } else {
                             Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }

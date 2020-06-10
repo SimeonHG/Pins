@@ -309,14 +309,14 @@ public class PersonProfileActivity extends AppCompatActivity {
 
                     if(request_type.equals("sent")){
                         friendshipStatus = FriendshipStatus.REQUEST_SENT;
-                        sendBtn.setText("Cancel Friend Request");
+                        sendBtn.setText("Cancel");
 
                         declineBtn.setVisibility(View.INVISIBLE);
                         declineBtn.setEnabled(false);
                     }
                     else if(request_type.equals("received")){
                         friendshipStatus = FriendshipStatus.REQUEST_RECEIVED;
-                        sendBtn.setText("Accept Friend Request");
+                        sendBtn.setText("Accept");
 
                         declineBtn.setVisibility(View.VISIBLE);
                         declineBtn.setEnabled(true);
@@ -391,7 +391,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                             if(task.isSuccessful()){
                                 sendBtn.setEnabled(true); //true?
                                 friendshipStatus = FriendshipStatus.REQUEST_SENT;
-                                sendBtn.setText("Cancel Friend Request");
+                                sendBtn.setText("Cancel");
 
                                 declineBtn.setVisibility(View.INVISIBLE);
                                 declineBtn.setEnabled(false);
@@ -420,7 +420,7 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         unblockBtn = findViewById(R.id.personUblockBtn);
 
-        friendshipStatus = FriendshipStatus.NOT_FRIENDS;// should change i think
+        friendshipStatus = FriendshipStatus.NOT_FRIENDS;
         declineBtn.setVisibility(View.INVISIBLE);
         declineBtn.setEnabled(false);
 
